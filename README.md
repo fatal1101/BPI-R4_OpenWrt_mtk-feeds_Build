@@ -1,12 +1,6 @@
 # BPI-R4_OpenWrt_mtk-feeds_Build
 
-Build Openwrt with the latest kernel and the latest mtk-feeds...
-
-I have been playing around testing different methods of adding and removing patches and files without having to modify the main script itself, to try and make the process as simple as posible.
-
-Anyway, I have ended up with this method after trying various others ways, including using patch itself to automate, but it was getting way to complex going down that rabit hole. 
-
-So back to basics it is and this is what I end up with.. 
+Build Openwrt with the latest kernel and the latest mtk-feeds... 
 
 # **To build with the latest kernel and mtk-feeds**
 
