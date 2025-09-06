@@ -2,51 +2,42 @@
 # ==================================================================================
 # BPI-R4 - OpenWrt with MTK-Feeds Build Script (Two-Stage Autobuild + Make)
 # ==================================================================================
-# This script first performs a non-interactive base build using the Mediatek
-# autobuilder. After a successful compilation, it offers an optional, interactive
-# step to customize the image with 'make menuconfig' and re-compile using 'make'.
-#
-# - To add/overwrite a file: Place it in 'openwrt-patches' or 'mtk-patches' and
-#   add its destination path to the corresponding 'add-patch' file.
-# - To remove a file: Add its path to the corresponding 'remove' file.
-# - Custom runtime configs (uci-defaults, etc.) go in the 'files' directory.
-#
+# Please Note - IF you use the custom setup scripts for 'uci-defaults'.. As a precaution
+#                 they will be auto convert with the dos2unix tool to correct any DOS line
+#                 endings that may be present. Some users edit in windows and pass the
+#                 files across to the build system, which can causes errors in unix based
+#                 systems.
 # Build system Install Note  - Run on Ubuntu 24.04 or later
 #                            - sudo apt update
-#                            - sudo apt install dos2unix rsync patch
+#                            - sudo apt install dos2unix.
 # Usage:
 #
 #   ./build_mtk.sh
-#   ./build_mtk.sh -b openwrt-23.05
+#   ./build_mtk.sh -b openwrt-24.10
 #
 # ==================================================================================
 
 set -euo pipefail
 
 # --- Dependency Check ---
-if ! command -v dos2unix &> /dev/null || ! command -v rsync &> /dev/null || ! command -v patch &> /dev/null; then
-    echo "ERROR: One or more dependencies (dos2unix, rsync, patch) are not installed." >&2
-    echo "Please run 'sudo apt update && sudo apt install dos2unix rsync patch'." >&2
+if ! command -v dos2unix &> /dev/null; then
+    echo "ERROR: 'dos2unix' is not installed. Please run 'sudo apt update && sudo apt install dos2unix'."
     exit 1
 fi
-
 
 # --- Main Configuration ---
 
 # OpenWrt Source Details
-# --- Use this line for remote cloning ---
-# readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
-# --- Use this line for local testing (uncomment and set your path) ---
-readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
+readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
+# --- Can use local repo (uncomment and set your path) ---
+#readonly OPENWRT_REPO="/home/user/repos/openwrt"
 
 OPENWRT_BRANCH="openwrt-24.10"
 readonly OPENWRT_COMMIT=""
 
-# Mediatek Feeds Source Details
-# --- Use this line for remote cloning ---
-# readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
-# --- Use this line for local testing (uncomment and set your path) ---
-readonly MTK_FEEDS_REPO="/home/gilly/repos/mtk-openwrt-feeds"
+readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
+# --- Can use local repo (uncomment and set your path) ---
+#readonly MTK_FEEDS_REPO="/home/user/repos/mtk-openwrt-feeds"
 
 readonly MTK_FEEDS_BRANCH="master"
 readonly MTK_FEEDS_COMMIT=""
@@ -55,7 +46,7 @@ readonly MTK_FEEDS_COMMIT=""
 readonly SOURCE_DEFAULT_CONFIG_DIR="config"
 readonly SOURCE_OPENWRT_PATCH_DIR="openwrt-patches"
 readonly SOURCE_MTK_FEEDS_PATCH_DIR="mtk-patches"
-readonly SOURCE_CUSTOM_FILES_DIR="files" # For custom configs, uci-defaults, etc.
+readonly SOURCE_CUSTOM_FILES_DIR="files"
 readonly OPENWRT_ADD_LIST="$SOURCE_OPENWRT_PATCH_DIR/openwrt-add-patch"
 readonly MTK_ADD_LIST="$SOURCE_MTK_FEEDS_PATCH_DIR/mtk-add-patch"
 readonly OPENWRT_REMOVE_LIST="$SOURCE_OPENWRT_PATCH_DIR/openwrt-remove"
@@ -67,7 +58,6 @@ readonly SCRIPT_EXECUTABLE_NAME=$(basename "$0")
 
 
 # --- Functions ---
-
 show_usage() {
     echo "Usage: $SCRIPT_EXECUTABLE_NAME [-b <branch_name>]"
     echo "  -b <branch_name>  Specify the OpenWrt branch to build."
@@ -157,23 +147,17 @@ remove_files_from_list() {
         if [[ "$relative_path" == *'*'* ]]; then
             log "($name) Removing files matching pattern: $relative_path"
             
-            # Enable nullglob to handle cases where the pattern matches no files
             shopt -s nullglob
-            # Expand the pattern into an array of filenames
             local files_to_delete=($target_pattern)
-            # Disable nullglob immediately after use to avoid affecting other parts of the script
             shopt -u nullglob
 
             if [ ${#files_to_delete[@]} -gt 0 ]; then
-                # If files were found, remove them and log the count
                 rm -f "${files_to_delete[@]}"
                 log "($name) Removed ${#files_to_delete[@]} file(s)."
             else
-                # If no files matched, log that
                 log "($name) No files found matching the pattern."
             fi
         else
-            # Handle single file
             if [ -f "$target_pattern" ]; then
                 log "($name) Removing: $relative_path"
                 rm -f "$target_pattern"
@@ -235,7 +219,6 @@ copy_custom_files() {
     log "Custom files have been copied successfully."
 }
 
-# --- This is the critical configuration step for the MTK autobuilder ---
 configure_build() {
     log "--- Configuring Mediatek Build ---"
     local defconfig_src="$SOURCE_DEFAULT_CONFIG_DIR/defconfig"
@@ -257,9 +240,7 @@ configure_build() {
     done
 }
 
-# --- New function for the optional custom build step with corrected flow ---
 prompt_for_custom_build() {
-    # This function is called from within the openwrt directory context
     log "--- Optional: Custom Image Creation ---"
     echo "The base image has been built successfully using the autobuilder."
     echo "Would you like to create a custom image?"
@@ -318,13 +299,11 @@ main() {
     log "--- Starting Full Build Setup ---"
     require_command "git" "awk" "make" "dos2unix" "rsync" "patch"
 
-    # --- Step 1: Repo Setup ---
     openwrt_commit=$( [ -n "$OPENWRT_COMMIT" ] && echo "$OPENWRT_COMMIT" || get_latest_commit_hash "$OPENWRT_REPO" "$OPENWRT_BRANCH" )
     setup_repo "$OPENWRT_REPO" "$OPENWRT_BRANCH" "$openwrt_commit" "$OPENWRT_DIR" "OpenWrt"
     mtk_feeds_commit=$( [ -n "$MTK_FEEDS_COMMIT" ] && echo "$MTK_FEEDS_COMMIT" || get_latest_commit_hash "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" )
     setup_repo "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" "$mtk_feeds_commit" "$MTK_FEEDS_DIR" "MTK Feeds"
 
-    # --- Step 2: Initialize Feeds ---
     (
         cd "$OPENWRT_DIR"
         log "Adding local Mediatek feeds to feeds configuration..."
@@ -336,21 +315,17 @@ main() {
         ./scripts/feeds install -a
     )
 
-    # --- Step 3: Prepare all custom source directories ---
     prepare_source_directory "$SOURCE_OPENWRT_PATCH_DIR" "OpenWrt Patches"
     prepare_source_directory "$SOURCE_MTK_FEEDS_PATCH_DIR" "MTK Patches"
     prepare_source_directory "$SOURCE_CUSTOM_FILES_DIR" "Custom Files"
 
-    # --- Step 4: Remove and Apply Source Files ---
     remove_files_from_list "$OPENWRT_REMOVE_LIST" "$OPENWRT_DIR" "OpenWrt"
     remove_files_from_list "$MTK_REMOVE_LIST" "$MTK_FEEDS_DIR" "MTK"
     apply_files_from_list "$OPENWRT_ADD_LIST" "$SOURCE_OPENWRT_PATCH_DIR" "$OPENWRT_DIR" "OpenWrt"
     apply_files_from_list "$MTK_ADD_LIST" "$SOURCE_MTK_FEEDS_PATCH_DIR" "$MTK_FEEDS_DIR" "MTK"
     
-    # --- Step 5: Copy Custom Runtime Files ---
     copy_custom_files
 
-    # --- Step 6: Configure and Run Final Build ---
     configure_build
     
     log "--- Starting the MediaTek autobuild script for the base image... ---"
@@ -361,7 +336,6 @@ main() {
     log "--- Base build process finished successfully! ---"
     log "--- You can find the base images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
 
-    # --- Step 7: Offer the optional custom build ---
     (
         cd "$OPENWRT_DIR"
         prompt_for_custom_build
