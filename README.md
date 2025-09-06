@@ -12,7 +12,7 @@ So back to basics it is and this is what I end up with..
 
 1. You can change branches "openwrt-24.10" , "master" , "main" etc...
 
-2. If you want to build with the latest commits leave both OPENWRT_COMMIT="" & MTK_FEEDS_COMMIT="" empty, or you can set specific commits with the full commit hash.
+2. If you want to build with the latest kernel and mtk commits leave both OPENWRT_COMMIT="" & MTK_FEEDS_COMMIT="" empty, or you can set specific commits with the full commit hash.
 
 3. I have add an optional function to clone from a local repo instead of pointing to the openwrt or mtk-openwrt-feeds repos to clone.
      * saves a lot of time when testing but it is optional and by default will clone from the online repos
@@ -20,14 +20,14 @@ So back to basics it is and this is what I end up with..
 4. Add two directories to place all patches and files into, one for "openwrt-patches" and the other for all "mtk-patches" 
      * Inside each direcory you drop in all your patches in to the corresponding target (openwrt or mtk)
 	 * Inside each directory there is two files "openwrt-add-patch" and "openwrt-remove"
-	 * To add or remove a file or a patch to the build just entry the target path into the file - target/linux/generic/backport-6.6/999-some.patch
+	 * To add or remove a file or a patch to the build just enter the full target path into the file - target/linux/generic/backport-6.6/999-some.patch
 	 * The script will seach each file at the start of the build and process all entries and apply them to the targets entered.. or remove
 	 
 5. You can use custom config files and scripts. 
 	 * Add any custom wireless, network config files to "/files/etc/config/wireless" and it will be included in the built image.
 	 * Add any custom uci-defaults script into "openwrt-patches/files/etc/uci-defaults/" and it will be built into the image.
 
-3. Added an option at the end of a successfully build, that prompt the usre if they want to enter into "make menuconfig" to add what ever packages or changes you need.
+6. Added an option at the end of a successfully build, that prompt the usre if they want to enter into "make menuconfig" to add what ever packages or changes you need.
      * When prompted either enter (yes/no): The default is 'no' or let it time out after 10 seconds and it will continue and existing the script.
 	 * If 'yes' enter into the make menuconfig and make the changes you need and save, it will continue the build process with and build new images with your changes changes.
 
@@ -50,7 +50,7 @@ So back to basics it is and this is what I end up with..
 
    `git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git`
    
-   `sudo chmod 776 -R mtk-openwrt_build.sh`
+   `sudo chmod 775 -R mtk-openwrt_build.sh`
 
 3. **Run the Script**:  
    * Make the script executable:  
