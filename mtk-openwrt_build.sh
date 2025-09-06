@@ -1,53 +1,65 @@
 #!/bin/bash
 # ==================================================================================
-# BPI-R4 - OpenWrt with MTK-Feeds Build Script (Modular)
+# BPI-R4 - OpenWrt with MTK-Feeds Build Script (Two-Stage Autobuild + Make)
 # ==================================================================================
-# This script clones OpenWrt and the Mediatek feeds into separate directories,
-# allowing for specific commits to be used for each. It then applies patches
-# from dedicated 'openwrt-patches' and 'mtk-patches' directories.
+# This script first performs a non-interactive base build using the Mediatek
+# autobuilder. After a successful compilation, it offers an optional, interactive
+# step to customize the image with 'make menuconfig' and re-compile using 'make'.
+#
+# - To add/overwrite a file: Place it in 'openwrt-patches' or 'mtk-patches' and
+#   add its destination path to the corresponding 'add-patch' file.
+# - To remove a file: Add its path to the corresponding 'remove' file.
+# - Custom runtime configs (uci-defaults, etc.) go in the 'files' directory.
 #
 # Build system Install Note  - Run on Ubuntu 24.04 or later
 #                            - sudo apt update
-#                            - sudo apt install dos2unix rsync
+#                            - sudo apt install dos2unix rsync patch
 # Usage:
 #
 #   ./build_mtk.sh
-#   ./build_mtk.sh -b openwrt-24.10
+#   ./build_mtk.sh -b openwrt-23.05
 #
 # ==================================================================================
 
 set -euo pipefail
 
 # --- Dependency Check ---
-if ! command -v dos2unix &> /dev/null; then
-    echo "ERROR: 'dos2unix' is not installed. Please run 'sudo apt update && sudo apt install dos2unix'." >&2
+if ! command -v dos2unix &> /dev/null || ! command -v rsync &> /dev/null || ! command -v patch &> /dev/null; then
+    echo "ERROR: One or more dependencies (dos2unix, rsync, patch) are not installed." >&2
+    echo "Please run 'sudo apt update && sudo apt install dos2unix rsync patch'." >&2
     exit 1
 fi
-if ! command -v rsync &> /dev/null; then
-    echo "ERROR: 'rsync' is not installed. Please run 'sudo apt update && sudo apt install rsync'." >&2
-    exit 1
-fi
+
 
 # --- Main Configuration ---
 
 # OpenWrt Source Details
-readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
+# --- Use this line for remote cloning ---
+# readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
+# --- Use this line for local testing (uncomment and set your path) ---
+readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
+
 OPENWRT_BRANCH="openwrt-24.10"
-# To build a specific commit, paste the full hash here. Leave empty for the latest.
 readonly OPENWRT_COMMIT=""
 
 # Mediatek Feeds Source Details
-readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
+# --- Use this line for remote cloning ---
+# readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
+# --- Use this line for local testing (uncomment and set your path) ---
+readonly MTK_FEEDS_REPO="/home/gilly/repos/mtk-openwrt-feeds"
+
 readonly MTK_FEEDS_BRANCH="master"
-# To build a specific commit, paste the full hash here. Leave empty for the latest.
 readonly MTK_FEEDS_COMMIT=""
 
-# --- Directory Configuration ---
+# --- Directory and File Configuration ---
 readonly SOURCE_DEFAULT_CONFIG_DIR="config"
 readonly SOURCE_OPENWRT_PATCH_DIR="openwrt-patches"
 readonly SOURCE_MTK_FEEDS_PATCH_DIR="mtk-patches"
-readonly SOURCE_OPENWRT_REVERT_DIR="openwrt-patches-revert"
-readonly SOURCE_MTK_REVERT_DIR="mtk-patches-revert"
+readonly SOURCE_CUSTOM_FILES_DIR="files" # For custom configs, uci-defaults, etc.
+readonly OPENWRT_ADD_LIST="$SOURCE_OPENWRT_PATCH_DIR/openwrt-add-patch"
+readonly MTK_ADD_LIST="$SOURCE_MTK_FEEDS_PATCH_DIR/mtk-add-patch"
+readonly OPENWRT_REMOVE_LIST="$SOURCE_OPENWRT_PATCH_DIR/openwrt-remove"
+readonly MTK_REMOVE_LIST="$SOURCE_MTK_FEEDS_PATCH_DIR/mtk-remove"
 
 readonly OPENWRT_DIR="openwrt"
 readonly MTK_FEEDS_DIR="mtk-feeds"
@@ -58,7 +70,7 @@ readonly SCRIPT_EXECUTABLE_NAME=$(basename "$0")
 
 show_usage() {
     echo "Usage: $SCRIPT_EXECUTABLE_NAME [-b <branch_name>]"
-    echo "  -b <branch_name>  Specify the OpenWrt branch to build (e.g., openwrt-23.05). Defaults to '$OPENWRT_BRANCH'."
+    echo "  -b <branch_name>  Specify the OpenWrt branch to build."
     exit 1
 }
 
@@ -83,7 +95,6 @@ get_latest_commit_hash() {
     commit_hash=$(git ls-remote "$repo_url" "refs/heads/$branch" | awk '{print $1}')
     if [ -z "$commit_hash" ]; then
         log "Error: Could not retrieve the commit hash for branch '$branch'."
-        log "Please check the repository URL and branch name."
         exit 1
     fi
     echo "$commit_hash"
@@ -99,7 +110,6 @@ setup_repo() {
     if [ -d "$target_dir" ]; then
         log "Directory '$target_dir' for $repo_name already exists. Removing it for a fresh clone."
         rm -rf "$target_dir"
-        log "Old directory removed."
     fi
 
     log "Cloning $repo_name repository from branch '$branch'..."
@@ -109,202 +119,192 @@ setup_repo() {
     log "Successfully checked out $repo_name commit."
 }
 
-prompt_for_menuconfig() {
-    log "--- Configuration Choice ---"
-    echo "Would you like to run 'make menuconfig' to modify the configuration?"
-    echo "You have 10 seconds to answer. The default is 'no' (use existing config)."
-    read -t 10 -p "Enter (yes/no): " user_choice || true
-
-    case "${user_choice,,}" in
-        y|yes)
-            log "User chose 'yes'. Running 'make menuconfig'..."
-            make menuconfig
-            log "Saving a copy of the new configuration to '../$SOURCE_DEFAULT_CONFIG_DIR/defconfig.new'..."
-            cp .config "../$SOURCE_DEFAULT_CONFIG_DIR/defconfig.new"
-            log "New configuration saved."
-            ;;
-        n|no)
-            log "User chose 'no'. Skipping 'make menuconfig'."
-            ;;
-        *)
-            log "No input received within 10 seconds. Defaulting to 'no'. Skipping 'make menuconfig'."
-            ;;
-    esac
-}
-
-# --- Reverts patches from the target repository using patch files ---
-revert_patches() {
+prepare_source_directory() {
     local source_dir=$1
-    local target_dir=$2
-    local revert_name=$3
-
-    log "--- Checking for $revert_name patches to revert from '$source_dir' ---"
-
-    if [ ! -d "$source_dir" ]; then
-        log "No revert directory ('$source_dir') found for $revert_name. Skipping."
-        return
-    fi
-
-    local patch_files
-    patch_files=$(find "$source_dir" -not -path '*/\.*' -type f -name "*.patch")
-
-    if [ -z "$patch_files" ]; then
-        log "No .patch files found in '$source_dir'. Nothing to revert."
-        return
-    fi
-
-    log "Found patches to revert. Applying them in reverse..."
-    (
-        cd "$target_dir"
-        for patch_file in $patch_files; do
-            local relative_patch_path="../$patch_file"
-            log "($revert_name) Reverting patch: $(basename "$patch_file")"
-            if patch -p1 -R < "$relative_patch_path"; then
-                log "Successfully reverted $(basename "$patch_file")."
-            else
-                log "==================================================================="
-                log "  WARNING: Failed to revert patch: $(basename "$patch_file")"
-                log "  This can happen if the codebase has changed significantly."
-                log "  The build will continue, but the result may be unexpected."
-                log "==================================================================="
-            fi
-        done
-    )
-}
-
-# --- Prepares source files and applies custom patches and file replacements ---
-prepare_files_and_apply_patches() {
-    local source_dir=$1
-    local target_dir=$2
-    local patch_name=$3
-
-    log "--- Preparing and applying $patch_name files and patches from '$source_dir' ---"
-
-    if [ ! -d "$source_dir" ]; then
-        log "No source directory ('$source_dir') found for $patch_name. Skipping."
-        return
-    fi
-
-    # --- Step 0: Prepare all files in the source directory ---
-    log "($patch_name) Preparing all source files..."
+    local dir_name=$2
+    log "--- Preparing source directory: '$source_dir' ($dir_name) ---"
+    if [ ! -d "$source_dir" ]; then return; fi
+    log "($dir_name) Cleaning and setting permissions..."
     find "$source_dir" -type f -name ".gitkeep" -delete
     find "$source_dir" -type f -exec dos2unix {} +
     find "$source_dir" -type d -exec chmod 755 {} +
     find "$source_dir" -type f -exec chmod 644 {} +
-    
-    local uci_defaults_dir="$source_dir/files/etc/uci-defaults"
+    local uci_defaults_dir="$source_dir/etc/uci-defaults"
     if [ -d "$uci_defaults_dir" ]; then
-         log "($patch_name) Making all uci-defaults scripts executable..."
+         log "($dir_name) Making all uci-defaults scripts executable..."
          find "$uci_defaults_dir" -type f -exec chmod 755 {} +
     fi
-
-    # --- Step 1: Copy all non-patch files (direct replacements) ---
-    log "($patch_name) Copying direct replacement files..."
-    (
-        cd "$source_dir"
-        if rsync -aR --exclude="*.patch" . "../$target_dir/"; then
-            log "($patch_name) Direct replacement files copied successfully."
-        else
-            log "ERROR: Failed to copy replacement files for $patch_name. Stopping build."
-            exit 1
-        fi
-    )
-    
-    # --- Step 2: Apply all .patch files ---
-    local patch_files
-    patch_files=$(find "$source_dir" -type f -name "*.patch")
-
-    if [ -z "$patch_files" ]; then
-        log "($patch_name) No custom .patch files found to apply."
-        return
-    fi
-    
-    log "($patch_name) Applying custom patches..."
-    (
-        cd "$target_dir"
-        for patch_file in $patch_files; do
-            local relative_patch_path="../$patch_file"
-            log "($patch_name) Applying custom patch: $(basename "$patch_file")"
-            if patch -p1 < "$relative_patch_path"; then
-                log "Successfully applied $(basename "$patch_file")."
-            else
-                log "==================================================================="
-                log "  ERROR: Failed to apply custom patch: $(basename "$patch_file")"
-                log "  This patch may be outdated or incorrect. Stopping build."
-                log "==================================================================="
-                exit 1 # Stop the script if a custom patch fails
-            fi
-        done
-    )
-    log "($patch_name) All custom patches applied successfully."
+    log "($dir_name) Preparation complete."
 }
 
-# --- Applies specific Mediatek configurations after patching ---
-configure_mtk_build() {
-    log "--- Applying specific Mediatek configurations ---"
-
-    local defconfig_src="$SOURCE_DEFAULT_CONFIG_DIR/defconfig"
-    local mtk_config_dest_dir="$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/"
-
-    if [ -f "$defconfig_src" ]; then
-        log "Copying defconfig to MTK autobuild directory..."
-        mkdir -p "$mtk_config_dest_dir"
-        cp "$defconfig_src" "$mtk_config_dest_dir"
-    else
-        log "Warning: No defconfig found at '$defconfig_src'. Skipping copy to MTK autobuild dir."
+remove_files_from_list() {
+    local list_file=$1
+    local target_dir=$2
+    local name=$3
+    log "--- Checking for $name files to remove from list '$list_file' ---"
+    if [ ! -f "$list_file" ]; then
+        log "Remove list '$list_file' not found. Skipping."
+        return
     fi
+    local lines_processed=0
+    while IFS= read -r relative_path; do
+        relative_path=$(echo "$relative_path" | tr -d '\r' | sed 's|^/||')
+        if [ -z "$relative_path" ]; then continue; fi
+        
+        local target_pattern="$target_dir/$relative_path"
+        lines_processed=$((lines_processed + 1))
 
-    log "Disabling 'perf' package in specific MTK configs..."
+        if [[ "$relative_path" == *'*'* ]]; then
+            log "($name) Removing files matching pattern: $relative_path"
+            
+            # Enable nullglob to handle cases where the pattern matches no files
+            shopt -s nullglob
+            # Expand the pattern into an array of filenames
+            local files_to_delete=($target_pattern)
+            # Disable nullglob immediately after use to avoid affecting other parts of the script
+            shopt -u nullglob
+
+            if [ ${#files_to_delete[@]} -gt 0 ]; then
+                # If files were found, remove them and log the count
+                rm -f "${files_to_delete[@]}"
+                log "($name) Removed ${#files_to_delete[@]} file(s)."
+            else
+                # If no files matched, log that
+                log "($name) No files found matching the pattern."
+            fi
+        else
+            # Handle single file
+            if [ -f "$target_pattern" ]; then
+                log "($name) Removing: $relative_path"
+                rm -f "$target_pattern"
+            else
+                log "($name) Warning: File to remove not found at '$target_pattern'. Skipping."
+            fi
+        fi
+    done < <(grep -v -E '^\s*#|^\s*$' "$list_file")
+
+    if [ "$lines_processed" -eq 0 ]; then
+        log "No files listed for removal in '$list_file'."
+    fi
+}
+
+apply_files_from_list() {
+    local list_file=$1
+    local source_dir=$2
+    local target_dir=$3
+    local name=$4
+    log "--- Applying $name files and patches from list '$list_file' ---"
+    if [ ! -f "$list_file" ]; then
+        log "Add list '$list_file' not found. Skipping."
+        return
+    fi
+    local lines_processed=0
+    while IFS= read -r dest_relative_path; do
+        dest_relative_path=$(echo "$dest_relative_path" | tr -d '\r' | sed 's|^/||')
+        if [ -z "$dest_relative_path" ]; then continue; fi
+        lines_processed=$((lines_processed + 1))
+        local filename
+        filename=$(basename "$dest_relative_path")
+        local source_file="$source_dir/$filename"
+        local dest_file="$target_dir/$dest_relative_path"
+        if [ ! -f "$source_file" ]; then
+            log "($name) Warning: Source file '$filename' not found in '$source_dir'. Skipping."
+            continue
+        fi
+        log "($name) Copying '$filename' to '$dest_relative_path'..."
+        local dest_dir
+        dest_dir=$(dirname "$dest_file")
+        mkdir -p "$dest_dir"
+        cp "$source_file" "$dest_file"
+    done < <(grep -v -E '^\s*#|^\s*$' "$list_file")
+    if [ "$lines_processed" -eq 0 ]; then
+        log "No files listed for application in '$list_file'."
+    fi
+}
+
+copy_custom_files() {
+    local source_dir="$SOURCE_CUSTOM_FILES_DIR"
+    local target_dir="$OPENWRT_DIR/files"
+    log "--- Copying custom runtime files from '$source_dir' ---"
+    if [ ! -d "$source_dir" ]; then
+        log "Source directory '$source_dir' not found. Skipping."
+        return
+    fi
+    mkdir -p "$target_dir"
+    rsync -a "$source_dir/" "$target_dir/"
+    log "Custom files have been copied successfully."
+}
+
+# --- This is the critical configuration step for the MTK autobuilder ---
+configure_build() {
+    log "--- Configuring Mediatek Build ---"
+    local defconfig_src="$SOURCE_DEFAULT_CONFIG_DIR/defconfig"
+    if [ -f "$defconfig_src" ]; then
+        cp "$defconfig_src" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/"
+    else
+        log "Warning: Main defconfig not found. MTK autobuild may use its default."
+    fi
+    log "Disabling 'perf' package in configs..."
     local perf_configs=(
         "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/defconfig"
         "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7988_wifi7_mac80211_mlo/.config"
         "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7986_mac80211/.config"
     )
-
     for config_file in "${perf_configs[@]}"; do
         if [ -f "$config_file" ]; then
             sed -i 's/CONFIG_PACKAGE_perf=y/# CONFIG_PACKAGE_perf is not set/' "$config_file"
-        else
-            log "Warning: Config file for perf disable not found, skipping: $config_file"
         fi
     done
 }
 
-run_openwrt_build() {
-    log "--- Starting OpenWrt Build Process ---"
-    (
-        cd "$OPENWRT_DIR"
+# --- New function for the optional custom build step with corrected flow ---
+prompt_for_custom_build() {
+    # This function is called from within the openwrt directory context
+    log "--- Optional: Custom Image Creation ---"
+    echo "The base image has been built successfully using the autobuilder."
+    echo "Would you like to create a custom image?"
+    echo "You have 10 seconds to answer. The default is 'no'."
+    local custom_choice=""
+    read -t 10 -p "Enter (yes/no): " custom_choice || true
 
-        log "Adding local Mediatek feeds to feeds configuration..."
-        if ! grep -q "src-link mtk" feeds.conf.default; then
-            echo "src-link mtk ../$MTK_FEEDS_DIR" >> feeds.conf.default
-            log "Local Mediatek feed added."
-        else
-            log "Local Mediatek feed already exists in feeds.conf.default."
-        fi
+    case "${custom_choice,,}" in
+        y|yes)
+            log "User chose 'yes'. Preparing for custom build..."
+            
+            log "Running feeds update and install for custom build..."
+            ./scripts/feeds update -a
+            ./scripts/feeds install -a
+            log "Feeds updated and installed."
 
-        log "Updating and installing feeds..."
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+            log "Launching 'make menuconfig' for customization..."
+            make menuconfig
+            log "Configuration saved."
 
-        log "Applying custom build configuration from '../$SOURCE_DEFAULT_CONFIG_DIR'..."
-        if [ -f "../$SOURCE_DEFAULT_CONFIG_DIR/defconfig" ]; then
-            log "Copying main defconfig file..."
-            cp "../$SOURCE_DEFAULT_CONFIG_DIR/defconfig" .config
-        else
-            log "Warning: No 'defconfig' found in '$SOURCE_DEFAULT_CONFIG_DIR'. You will get a default configuration."
-        fi
+            log "--- Build Confirmation for Custom Image ---"
+            echo "Would you like to build the custom image with the new configuration?"
+            echo "You have 10 seconds to answer. The default is 'no'."
+            local build_choice=""
+            read -t 10 -p "Enter (yes/no): " build_choice || true
 
-        log "Validating and expanding final .config..."
-        make defconfig
-
-        prompt_for_menuconfig
-
-        log "Starting the build... This could take a very long time."
-        make "-j$(nproc)" V=s
-    )
-    log "--- Build process finished successfully! ---"
+            case "${build_choice,,}" in
+                y|yes)
+                    log "Starting the custom build with 'make -j\$(nproc)'..."
+                    make -j"$(nproc)"
+                    log "--- Custom build process finished successfully! ---"
+                    log "--- You can find the custom images in 'bin/targets/mediatek/filogic/' ---"
+                    ;;
+                *)
+                    log "User chose 'no' or timed out. Custom build skipped."
+                    log "Your custom configuration has been saved in '$OPENWRT_DIR/.config'."
+                    ;;
+            esac
+            ;;
+        *)
+            log "User chose 'no' or timed out. Skipping custom image creation."
+            ;;
+    esac
 }
+
 
 main() {
     while getopts ":b:" opt; do
@@ -316,45 +316,58 @@ main() {
     shift "$((OPTIND -1))"
 
     log "--- Starting Full Build Setup ---"
-    require_command "git" "awk" "make" "dos2unix" "rsync"
+    require_command "git" "awk" "make" "dos2unix" "rsync" "patch"
 
-    # --- OpenWrt Repo Setup ---
-    local openwrt_commit
-    if [ -n "$OPENWRT_COMMIT" ]; then
-        openwrt_commit="$OPENWRT_COMMIT"
-        log "Using specified OpenWrt commit hash: $openwrt_commit"
-    else
-        openwrt_commit=$(get_latest_commit_hash "$OPENWRT_REPO" "$OPENWRT_BRANCH")
-        log "Latest commit for OpenWrt '$OPENWRT_BRANCH' is: $openwrt_commit"
-    fi
+    # --- Step 1: Repo Setup ---
+    openwrt_commit=$( [ -n "$OPENWRT_COMMIT" ] && echo "$OPENWRT_COMMIT" || get_latest_commit_hash "$OPENWRT_REPO" "$OPENWRT_BRANCH" )
     setup_repo "$OPENWRT_REPO" "$OPENWRT_BRANCH" "$openwrt_commit" "$OPENWRT_DIR" "OpenWrt"
-
-    # --- MTK Feeds Repo Setup ---
-    local mtk_feeds_commit
-    if [ -n "$MTK_FEEDS_COMMIT" ]; then
-        mtk_feeds_commit="$MTK_FEEDS_COMMIT"
-        log "Using specified MTK Feeds commit hash: $mtk_feeds_commit"
-    else
-        mtk_feeds_commit=$(get_latest_commit_hash "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH")
-        log "Latest commit for MTK Feeds '$MTK_FEEDS_BRANCH' is: $mtk_feeds_commit"
-    fi
+    mtk_feeds_commit=$( [ -n "$MTK_FEEDS_COMMIT" ] && echo "$MTK_FEEDS_COMMIT" || get_latest_commit_hash "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" )
     setup_repo "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" "$mtk_feeds_commit" "$MTK_FEEDS_DIR" "MTK Feeds"
 
-    # --- Revert Unwanted Patches ---
-    revert_patches "$SOURCE_OPENWRT_REVERT_DIR" "$OPENWRT_DIR" "OpenWrt"
-    revert_patches "$SOURCE_MTK_REVERT_DIR" "$MTK_FEEDS_DIR" "MTK"
+    # --- Step 2: Initialize Feeds ---
+    (
+        cd "$OPENWRT_DIR"
+        log "Adding local Mediatek feeds to feeds configuration..."
+        if ! grep -q "src-link mtk" feeds.conf.default; then
+            echo "src-link mtk ../$MTK_FEEDS_DIR" >> feeds.conf.default
+        fi
+        log "Updating and installing feeds to prepare the source tree..."
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+    )
 
-    # --- Apply Custom Patches and Files ---
-    prepare_files_and_apply_patches "$SOURCE_OPENWRT_PATCH_DIR" "$OPENWRT_DIR" "OpenWrt"
-    prepare_files_and_apply_patches "$SOURCE_MTK_FEEDS_PATCH_DIR" "$MTK_FEEDS_DIR" "MTK"
-    
-    # --- Configure MTK specifics after patching ---
-    configure_mtk_build
+    # --- Step 3: Prepare all custom source directories ---
+    prepare_source_directory "$SOURCE_OPENWRT_PATCH_DIR" "OpenWrt Patches"
+    prepare_source_directory "$SOURCE_MTK_FEEDS_PATCH_DIR" "MTK Patches"
+    prepare_source_directory "$SOURCE_CUSTOM_FILES_DIR" "Custom Files"
 
-    # --- Run Build ---
-    run_openwrt_build
+    # --- Step 4: Remove and Apply Source Files ---
+    remove_files_from_list "$OPENWRT_REMOVE_LIST" "$OPENWRT_DIR" "OpenWrt"
+    remove_files_from_list "$MTK_REMOVE_LIST" "$MTK_FEEDS_DIR" "MTK"
+    apply_files_from_list "$OPENWRT_ADD_LIST" "$SOURCE_OPENWRT_PATCH_DIR" "$OPENWRT_DIR" "OpenWrt"
+    apply_files_from_list "$MTK_ADD_LIST" "$SOURCE_MTK_FEEDS_PATCH_DIR" "$MTK_FEEDS_DIR" "MTK"
     
-    log "--- You can find the output images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
+    # --- Step 5: Copy Custom Runtime Files ---
+    copy_custom_files
+
+    # --- Step 6: Configure and Run Final Build ---
+    configure_build
+    
+    log "--- Starting the MediaTek autobuild script for the base image... ---"
+    (
+        cd "$OPENWRT_DIR"
+        bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" filogic-mac80211-mt7988_rfb-mt7996 log_file=make
+    )
+    log "--- Base build process finished successfully! ---"
+    log "--- You can find the base images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
+
+    # --- Step 7: Offer the optional custom build ---
+    (
+        cd "$OPENWRT_DIR"
+        prompt_for_custom_build
+    )
+    
+    log "--- Script finished. ---"
 }
 
 main "$@"

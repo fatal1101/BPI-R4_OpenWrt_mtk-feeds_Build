@@ -1,19 +1,19 @@
-From 43646b9966887861777ba48ffb2937a6d01bc317 Mon Sep 17 00:00:00 2001
+From 86eb5b97ecfcaa1cd14e4625b83eff84ca360432 Mon Sep 17 00:00:00 2001
 From: Gilly1970 <gilroyscott@hotmail.com>
-Date: Fri, 29 Aug 2025 05:02:01 +0000
-Subject: [PATCH] 3703-commit-fa0f04a-Remove-duplicated-ports
+Date: Sat, 6 Sep 2025 18:24:43 +1000
+Subject: [PATCH] 3703-commit-f871412-Remove-duplicated-ports.patch
 
 ---
- .../base-files/etc/board.d/02_network.orig    | 366 ------------------
- 1 file changed, 366 deletions(-)
+ .../base-files/etc/board.d/02_network.orig    | 371 ------------------
+ 1 file changed, 371 deletions(-)
  delete mode 100644 target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig
 
 diff --git a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig
 deleted file mode 100644
-index 980a14f..0000000
+index c61002e..0000000
 --- a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig
 +++ /dev/null
-@@ -1,366 +0,0 @@
+@@ -1,371 +0,0 @@
 -
 -. /lib/functions.sh
 -. /lib/functions/uci-defaults.sh
@@ -180,6 +180,7 @@ index 980a14f..0000000
 -		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" wan
 -		;;
 -	asus,tuf-ax4200|\
+-	iptime,ax3000sm|\
 -	jdcloud,re-cp-03|\
 -	mediatek,mt7981-rfb|\
 -	netcore,n60|\
@@ -203,7 +204,8 @@ index 980a14f..0000000
 -		;;
 -	bananapi,bpi-r3-mini|\
 -	edgecore,eap111|\
--	huasifei,wh3000)
+-	huasifei,wh3000|\
+-	huasifei,wh3000-pro)
 -		ucidef_set_interfaces_lan_wan eth0 eth1
 -		;;
 -	bananapi,bpi-r4|\
@@ -217,13 +219,16 @@ index 980a14f..0000000
 -	cudy,ap3000-v1|\
 -	cudy,re3000-v1|\
 -	netgear,wax220|\
+-	openfi,6c|\
 -	ubnt,unifi-6-plus|\
 -	wavlink,wl-wn573hx3|\
 -	zyxel,nwa50ax-pro)
 -		ucidef_set_interface_lan "eth0"
 -		;;
 -	cudy,m3000-v1|\
+-	cudy,tr3000-256mb-v1|\
 -	cudy,tr3000-v1|\
+-	cudy,tr3000-v1-ubootmod|\
 -	glinet,gl-mt2500|\
 -	glinet,gl-mt3000|\
 -	glinet,gl-x3000|\
