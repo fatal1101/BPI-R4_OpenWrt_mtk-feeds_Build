@@ -33,7 +33,7 @@ Build Openwrt with the latest kernel and latest mtk-openwrt-feeds...
 
 ## **How to Use**
 
-1. **Prerequisites**: Ensure you have a compatible build environment, such as **Ubuntu 24.04 LTS**. You will also need to install `dos2unix` & `rsync`:  
+1. **Prerequisites**: A Compatible build environment, such as **Ubuntu 24.04 LTS**. You will also need to install `dos2unix` & `rsync`:  
    `sudo apt update   
    sudo apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \\ 
    gettext git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev \\  
