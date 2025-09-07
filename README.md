@@ -23,9 +23,9 @@ Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will
 	 * Add any custom wireless, network config files to "/files/etc/config/" directory and it will be included into the built image.
 	 * Add any custom uci-defaults script into "openwrt-patches/files/etc/uci-defaults/" and it will be built into the image.
 
-7. Added an option at the end of a successfully build, which will prompt the usre if they want to enter into "make menuconfig".. optional.
+7. Added an option at the end of a successfully build, which will prompt the user if they want to enter into "make menuconfig".. optional.
      * When prompted either enter (yes/no): The default is 'no' or let it time out after 10 seconds and it will continue and existing the script.
-	 * If 'yes' enter into the make menuconfig and make any custom changes you need to the config and save, it will continue into a new build from the new config creating new images.
+	 * If 'yes' enter into the make menuconfig and make any custom changes you need and save, it will continue into a new build creating new images with the changes made using make menuconfig.
 
 8. Error Checks - All scripts and patches will be auto chacked with dos2unix and corrected if needed. 
 
