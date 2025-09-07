@@ -1,6 +1,6 @@
 # BPI-R4_OpenWrt_mtk-feeds_Build
 
-Build Openwrt with the latest kernel and latest mtk-openwrt-feeds... 
+Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will build all the basic image for the BPI-R4.
 
 ## **To build with the latest kernel and mtk-feeds**
 
@@ -17,15 +17,15 @@ Build Openwrt with the latest kernel and latest mtk-openwrt-feeds...
      * Inside each direcory you drop in all your patches corresponding to the target (openwrt or mtk)
 	 * Inside each directory there is two files "openwrt-add-patch" and "openwrt-remove"
 	 * To add or remove a file or patch just enter the full target path into the file - target/linux/generic/backport-6.6/999-some.patch
-	 * The script will search each file at the start of the build and process all entries and apply them to the targeted locations.. or remove
+	 * The script will search each file at the start of the build and process all entries apply them to the targeted directories.. or removal
 	 
 6. You can use custom config files and scripts. 
 	 * Add any custom wireless, network config files to "/files/etc/config/" directory and it will be included into the built image.
 	 * Add any custom uci-defaults script into "openwrt-patches/files/etc/uci-defaults/" and it will be built into the image.
 
-7. Added an option at the end of a successfully build, that will prompt the usre if they want to enter into "make menuconfig".. optional
+7. Added an option at the end of a successfully build, which will prompt the usre if they want to enter into "make menuconfig".. optional.
      * When prompted either enter (yes/no): The default is 'no' or let it time out after 10 seconds and it will continue and existing the script.
-	 * If 'yes' enter into the make menuconfig and make the changes you need and save, it will continue the build process and build a new images with your changes.
+	 * If 'yes' enter into the make menuconfig and make any custom changes you need to the config and save, it will continue into a new build from the new config creating new images.
 
 8. Error Checks - All scripts and patches will be auto chacked with dos2unix and corrected if needed. 
 
@@ -54,6 +54,6 @@ Build Openwrt with the latest kernel and latest mtk-openwrt-feeds...
      `./mtk-openwrt_build.sh`
 
 ## **Notes**
-Please note - Using the latest kernels with the mtk-feeds can be unstable and problematic using them on a main router.
+Please note - This script was designed to build openwrt with the latest kernels, with the latest mtk-openwrt-feeds targetting the BPI-R4 images.
 
 
