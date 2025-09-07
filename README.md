@@ -13,7 +13,7 @@ Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will
 4. I have add an optional function to clone from a local repo instead of pointing to the openwrt or mtk-openwrt-feeds repos to clone.
      * saves a lot of time when testing but it is optional, default will clone from the online repos
 
-5. Add two directories to place all patches and files into, one for "openwrt-patches" and the other for all "mtk-patches" 
+5. Add two directories to place all patches and files into. One for "openwrt-patches" and the other "mtk-patches" 
      * Inside each direcory you drop in all your patches corresponding to the target (openwrt or mtk)
 	 * Inside each directory there is two files "openwrt-add-patch" and "openwrt-remove"
 	 * To add or remove a file or patch just enter the full target path into the file - target/linux/generic/backport-6.6/999-some.patch
