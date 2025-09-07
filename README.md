@@ -25,7 +25,7 @@ Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will
 
 7. Added an option at the end of a successfully build, which will prompt the user if they want to enter into "make menuconfig".. optional.
      * When prompted either enter (yes/no): The default is 'no' or let it time out after 10 seconds and it will continue and existing the script.
-	 * If 'yes' enter into the make menuconfig and make any custom changes you need and save, it will continue into a new build creating new images with the changes made using make menuconfig.
+	 * If 'yes' enter into the make menuconfig and make any custom changes you need and save, it will continue into a new build creating new images with those changes.
 
 8. Error Checks - All scripts and patches will be auto chacked with dos2unix and corrected if needed. 
 
@@ -54,6 +54,6 @@ Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will
      `./mtk-openwrt_build.sh`
 
 ## **Notes**
-Please note - This script was designed to build openwrt with the latest kernels, with the latest mtk-openwrt-feeds targetting the BPI-R4 images.
+Please note - This script is still in development and is more than likely going to change at some point. If you like it the way it is make sure you have a backup copy :)
 
 
