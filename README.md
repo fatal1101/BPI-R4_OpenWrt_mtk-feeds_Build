@@ -1,6 +1,6 @@
 # BPI-R4_OpenWrt_mtk-feeds_Build
 
-Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will build all the basic image for the BPI-R4.
+**Build Openwrt with the latest kernel and mtk-openwrt-feeds, by default this will build all the basic image for the BPI-R4.**
 
 ## **To build with the latest kernel and mtk-feeds**
 
