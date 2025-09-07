@@ -1,6 +1,6 @@
 # BPI-R4_OpenWrt_mtk-feeds_Build
 
-Build Openwrt with the latest kernel and the latest mtk-feeds... 
+Build Openwrt with the latest kernel and latest mtk-openwrt-feeds... 
 
 ## **To build with the latest kernel and mtk-feeds**
 
@@ -34,16 +34,16 @@ Build Openwrt with the latest kernel and the latest mtk-feeds...
 ## **How to Use**
 
 1. **Prerequisites**: Ensure you have a compatible build environment, such as **Ubuntu 24.04 LTS**. You will also need to install `dos2unix` & `rsync`:  
-   <sup>sudo apt update   
+   `sudo apt update   
    sudo apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \\ 
    gettext git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev \\  
-   file wget dos2unix rsync</sup>
+   file wget dos2unix rsync`
 
 2. **Clone repo**:
 
-   <sup>git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git</sup>
+   `git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git`
    
-   <sup>sudo chmod 775 -R mtk-openwrt_build.sh</sup>
+   `sudo chmod 775 -R mtk-openwrt_build.sh`
 
 3. **Run the Script**:  
    * Make the script executable:  
