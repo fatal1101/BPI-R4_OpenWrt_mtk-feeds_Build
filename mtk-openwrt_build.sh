@@ -20,8 +20,9 @@
 set -euo pipefail
 
 # --- Dependency Check ---
-if ! command -v dos2unix &> /dev/null; then
-    echo "ERROR: 'dos2unix' is not installed. Please run 'sudo apt update && sudo apt install dos2unix'."
+if ! command -v dos2unix &> /dev/null || ! command -v rsync &> /dev/null; then
+    echo "ERROR: One or more dependencies (dos2unix, rsync) are not installed." >&2
+    echo "Please run 'sudo apt update && sudo apt install dos2unix rsync'." >&2
     exit 1
 fi
 
