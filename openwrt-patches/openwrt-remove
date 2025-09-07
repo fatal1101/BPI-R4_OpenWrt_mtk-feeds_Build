@@ -1,3 +1,2 @@
 package/firmware/wireless-regdb/patches/*
 target/linux/mediatek/files/drivers/net/phy/rtk/modules.builtin
-target/linux/mediatek/patches-6.6/999-2133-pwm-mediatek-add-longer-period-support.patch
