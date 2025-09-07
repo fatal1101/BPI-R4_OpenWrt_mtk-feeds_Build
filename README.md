@@ -48,10 +48,10 @@ Build Openwrt with the latest kernel and latest mtk-openwrt-feeds...
 
 3. **Run the Script**:  
    * Make the script executable:  
-     <sup>chmod \+x mtk-openwrt_build.sh</sup>
+     `chmod \+x mtk-openwrt_build.sh`
      
    * Execute the script:  
-     <sup>./mtk-openwrt_build.sh</sup>
+     `./mtk-openwrt_build.sh`
 
 ## **Notes**
 Please note - Using the latest kernels with the mtk-feeds can be unstable and problematic using them on a main router.
