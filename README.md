@@ -8,7 +8,7 @@ Build Openwrt with the latest kernel and latest mtk-openwrt-feeds...
 
 2. If you want to build with the latest kernel with the latest mtk commits leave both OPENWRT_COMMIT="" & MTK_FEEDS_COMMIT="" empty.
 
-3. If  you want to target a specific commits use the full commit hash 
+3. If you want to target a specific commits use the full commit hash OPENWRT_COMMIT="4a18bb1056c78e1224ae3444f5862f6265f9d91c"
 
 4. I have add an optional function to clone from a local repo instead of pointing to the openwrt or mtk-openwrt-feeds repos to clone.
      * saves a lot of time when testing but it is optional, default will clone from the online repos
