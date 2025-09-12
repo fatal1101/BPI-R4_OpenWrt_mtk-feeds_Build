@@ -59,26 +59,6 @@ This is my latest evolving build script which incorperates the "rsync" function 
 ## **Notes**
 Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is my own modified version of both the "99999_tx_power_check.patch" & "9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" patches.. I've combined the same logic from both patches and applied it into the one patch.
 
-root@OpenWrt:~# dmesg | grep mt7996
-[    5.359751] FIT:          flat_dt sub-image 0x00685000..0x006858f0 "fdt-mt7988a-bananapi-bpi-r4-wifi-mt7996a" (ARM64 OpenWrt bananapi_bpi-r4 device tree overlay mt7988a-bananapi-bpi-r4-wifi-mt7996a)
-[   14.564927] mt7996e_hif 0001:01:00.0: assign IRQ: got 124
-[   14.570344] mt7996e_hif 0001:01:00.0: enabling device (0000 -> 0002)
-[   14.576722] mt7996e_hif 0001:01:00.0: enabling bus mastering
-[   14.582486] mt7996e 0000:01:00.0: assign IRQ: got 121
-[   14.587545] mt7996e 0000:01:00.0: enabling device (0000 -> 0002)
-[   14.593556] mt7996e 0000:01:00.0: enabling bus mastering
-[   14.684236] mt7996e 0000:01:00.0: attaching wed device 0 version 3.0
-[   14.815063] mt7996e_hif 0001:01:00.0: attaching wed device 1 version 3.0
-[   15.144509] mt7996e 0000:01:00.0: HW/SW Version: 0x8a108a10, Build Time: 20250904203308a
-[   15.250373] mt7996e 0000:01:00.0: WM Firmware Version: ____000000, Build Time: 20250904203304
-[   15.295309] mt7996e 0000:01:00.0: DSP Firmware Version: ____000000, Build Time: 20250904202814
-[   15.316818] mt7996e 0000:01:00.0: WA Firmware Version: ____000000, Build Time: 20250904203218
-[   16.208804] mt7996e 0000:01:00.0: corrupted EEPROM detected, forcing default
-[   16.232865] mt7996e 0000:01:00.0: registering led 'mt76-phy0'
-[   31.777052] mt7996e 0000:01:00.0: Platform_type = 2, bypass_rro = 1, txfree_path = 0
-[   36.642242] mt7996e 0000:01:00.0 phy0.1-ap0: entered allmulticast mode
-[   36.648927] mt7996e 0000:01:00.0 phy0.1-ap0: entered promiscuous mode
-[   36.795098] mt7996e 0000:01:00.0: mt76_add_chanctx: add 100 on mt76 band 1
 
 
 
