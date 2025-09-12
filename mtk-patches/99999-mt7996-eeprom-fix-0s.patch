@@ -1,0 +1,117 @@
+From 1a79ea38e07b8188bc755091dc096822c0ee4a29 Mon Sep 17 00:00:00 2001
+From: Gilly1970 <gilroyscott@hotmail.com>
+Date: Tue, 09 Sep 2025 20:16:22 +1000
+Subject: [PATCH] new patch
+
+---
+ mt7996/eeprom.c | 69 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 65 insertions(+), 4 deletions(-)
+
+diff --git a/mt7996/eeprom.c b/mt7996/eeprom.c
+index 612ff3f..77c46a4 100644
+--- a/mt7996/eeprom.c
++++ b/mt7996/eeprom.c
+@@ -81,6 +81,36 @@ const struct ieee80211_channel dpd_6g_ch_list_bw320[] = {
+ 	CHAN6G(191, 6905)
+ };
+ 
++static void
++mt7996_eeprom_fixup_tx_power(struct mt7996_dev *dev, const u8 *def)
++{
++	u8 *eeprom = dev->mt76.eeprom.data;
++	int i;
++	bool zeros_detected = false;
++
++	if (!eeprom[MT_EE_TX0_POWER_2G]) {
++		eeprom[MT_EE_TX0_POWER_2G] = def[MT_EE_TX0_POWER_2G];
++		zeros_detected = true;
++	}
++
++	for (i = MT_EE_TX0_POWER_5G; i < MT_EE_TX0_POWER_5G + 5; ++i) {
++		if (!eeprom[i]) {
++			eeprom[i] = def[i];
++			zeros_detected = true;
++		}
++	}
++
++	for (i = MT_EE_TX0_POWER_6G; i < MT_EE_TX0_POWER_6G + 8; ++i) {
++		if (!eeprom[i]) {
++			eeprom[i] = def[i];
++			zeros_detected = true;
++		}
++	}
++
++	if (zeros_detected)
++		dev_warn(dev->mt76.dev, "eeprom tx_power zeros detected, using defaults\n");
++}
++
+ static int mt7996_check_eeprom(struct mt7996_dev *dev)
+ {
+ 	u8 *eeprom = dev->mt76.eeprom.data;
+@@ -597,22 +627,53 @@ fail:
+ 
+ int mt7996_eeprom_init(struct mt7996_dev *dev)
+ {
++	const struct firmware *fw = NULL;
++	u8 *def_eeprom;
+ 	int ret;
+ 
+-	ret = mt7996_eeprom_load(dev);
++	/* Pre-load default EEPROM data to use for fixups */
++	ret = request_firmware(&fw, mt7996_eeprom_name(dev), dev->mt76.dev);
+ 	if (ret)
+ 		return ret;
+ 
++	if (!fw || !fw->data) {
++		dev_err(dev->mt76.dev, "Invalid default EEPROM file\n");
++		ret = -EINVAL;
++		goto out;
++	}
++	def_eeprom = (u8 *)fw->data;
++
++	ret = mt7996_eeprom_load(dev);
++	if (ret)
++		goto out;
++
++	/* Sledgehammer check for severely corrupted EEPROMs */
++	if (!dev->flash_mode) {
++		u8 *eeprom = dev->mt76.eeprom.data;
++		if (!eeprom[MT_EE_TX0_POWER_2G] || !eeprom[MT_EE_TX0_POWER_5G] ||
++		    !eeprom[MT_EE_TX0_POWER_6G]) {
++			dev_warn(dev->mt76.dev, "corrupted EEPROM detected, forcing default\n");
++			memcpy(dev->mt76.eeprom.data, def_eeprom, MT7996_EEPROM_SIZE);
++			dev->flash_mode = true;
++		}
++	}
++
++	/* Run surgical fix, using the pre-loaded default data */
++	mt7996_eeprom_fixup_tx_power(dev, def_eeprom);
++
+ 	mt7996_eeprom_load_precal(dev);
+ 
+ 	ret = mt7996_eeprom_parse_hw_cap(dev, &dev->phy);
+ 	if (ret < 0)
+-		return ret;
++		goto out;
+ 
+ 	memcpy(dev->mphy.macaddr, dev->mt76.eeprom.data + MT_EE_MAC_ADDR, ETH_ALEN);
+ 	mt76_eeprom_override(&dev->mphy);
+ 
+-	return 0;
++	ret = 0;
++out:
++	release_firmware(fw);
++	return ret;
+ }
+ 
+ int mt7996_eeprom_get_target_power(struct mt7996_dev *dev,
+@@ -714,4 +775,4 @@ const u8 mt7996_sku_group_len[] = {
+ 	[SKU_EHT2x996_484] = 16,
+ 	[SKU_EHT3x996] = 16,
+ 	[SKU_EHT3x996_484] = 16,
+-};
++};
+\ No newline at end of file
+-- 
+2.43.0
+

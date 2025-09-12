@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 package/firmware/wireless-regdb/patches/*
 target/linux/mediatek/files/drivers/net/phy/rtk/modules.builtin
+=======
+package/firmware/wireless-regdb/patches/*
+>>>>>>> 54135fd (make public)

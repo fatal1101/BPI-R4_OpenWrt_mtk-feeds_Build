@@ -1,5 +1,4 @@
 autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/500-tx_power.patch
 24.10/patches-base/1007-mt7988a.dtsi.patch
-autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/99999_tx_power_check.patch
-autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch
+autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/99999-mt7996-eeprom-fix-0s.patch
 autobuild/unified/filogic/24.10/patches-base/3703-commit-f871412-Remove-duplicated-ports.patch.patch
