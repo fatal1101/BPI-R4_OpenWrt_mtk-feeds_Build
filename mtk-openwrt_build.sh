@@ -2,10 +2,10 @@
 # ==================================================================================
 # BPI-R4 - OpenWrt with MTK-Feeds Build Script (Two-Stage Autobuild + Make)
 # ==================================================================================
-# This script uses list files to manage custom content.
+# - This script uses list files to manage custom content.
 # - To add/overwrite a file: Place it in 'openwrt-patches' or 'mtk-patches'.
-#   For most files, list the destination path in the 'add-patch' file.
-#   For filename conflicts, use the 'source_filename:destination_path' format.
+# - For most files, list the destination path in the 'add-patch' file.
+# - For filename conflicts, use the 'source_filename:destination_path' format.
 # - To remove a file: Add its path to the corresponding 'remove' file.
 # - Custom runtime configs (uci-defaults, etc.) go in the 'files' directory.
 #
@@ -180,7 +180,6 @@ remove_files_from_list() {
     fi
 }
 
-# --- Applies files from a source directory based on a hybrid list file ---
 apply_files_from_list() {
     local list_file=$1
     local source_dir=$2
@@ -195,7 +194,6 @@ apply_files_from_list() {
 
     local lines_processed=0
     while IFS= read -r line; do
-        # Skip comments and empty lines
         [[ "$line" =~ ^\s*# ]] || [ -z "$line" ] && continue
         
         lines_processed=$((lines_processed + 1))
@@ -203,12 +201,10 @@ apply_files_from_list() {
         local source_filename
         local dest_relative_path
 
-        # Check if the line uses the 'source:destination' format
         if [[ "$line" == *":"* ]]; then
             source_filename=$(echo "$line" | cut -d':' -f1 | tr -d '[:space:]')
             dest_relative_path=$(echo "$line" | cut -d':' -f2- | tr -d '[:space:]' | sed 's|^/||')
         else
-            # Fallback to the old format (destination only)
             dest_relative_path=$(echo "$line" | tr -d '[:space:]' | sed 's|^/||')
             source_filename=$(basename "$dest_relative_path")
         fi
@@ -342,13 +338,11 @@ main() {
     log "--- Starting Full Build Setup ---"
     require_command "git" "awk" "make" "dos2unix" "rsync" "patch"
 
-    # --- Step 1: Repo Setup ---
     openwrt_commit=$( [ -n "$OPENWRT_COMMIT" ] && echo "$OPENWRT_COMMIT" || get_latest_commit_hash "$OPENWRT_REPO" "$OPENWRT_BRANCH" )
     setup_repo "$OPENWRT_REPO" "$OPENWRT_BRANCH" "$openwrt_commit" "$OPENWRT_DIR" "OpenWrt"
     mtk_feeds_commit=$( [ -n "$MTK_FEEDS_COMMIT" ] && echo "$MTK_FEEDS_COMMIT" || get_latest_commit_hash "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" )
     setup_repo "$MTK_FEEDS_REPO" "$MTK_FEEDS_BRANCH" "$mtk_feeds_commit" "$MTK_FEEDS_DIR" "MTK Feeds"
 
-    # --- Step 2: Initialize Feeds ---
     (
         cd "$OPENWRT_DIR"
         log "Adding local Mediatek feeds to feeds configuration..."
@@ -360,21 +354,17 @@ main() {
         ./scripts/feeds install -a
     )
 
-    # --- Step 3: Prepare all custom source directories ---
     prepare_source_directory "$SOURCE_OPENWRT_PATCH_DIR" "OpenWrt Patches"
     prepare_source_directory "$SOURCE_MTK_FEEDS_PATCH_DIR" "MTK Patches"
     prepare_source_directory "$SOURCE_CUSTOM_FILES_DIR" "Custom Files"
 
-    # --- Step 4: Remove and Apply Source Files ---
     remove_files_from_list "$OPENWRT_REMOVE_LIST" "$OPENWRT_DIR" "OpenWrt"
     remove_files_from_list "$MTK_REMOVE_LIST" "$MTK_FEEDS_DIR" "MTK"
     apply_files_from_list "$OPENWRT_ADD_LIST" "$SOURCE_OPENWRT_PATCH_DIR" "$OPENWRT_DIR" "OpenWrt"
     apply_files_from_list "$MTK_ADD_LIST" "$SOURCE_MTK_FEEDS_PATCH_DIR" "$MTK_FEEDS_DIR" "MTK"
     
-    # --- Step 5: Copy Custom Runtime Files ---
     copy_custom_files
 
-    # --- Step 6: Configure and Run Base Build ---
     configure_build
     
     log "--- Starting the MediaTek autobuild script for the base image... ---"
@@ -385,7 +375,6 @@ main() {
     log "--- Base build process finished successfully! ---"
     log "--- You can find the base images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
 
-    # --- Step 7: Offer the optional custom build ---
     (
         cd "$OPENWRT_DIR"
         prompt_for_custom_build
