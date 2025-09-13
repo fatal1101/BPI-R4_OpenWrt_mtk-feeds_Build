@@ -47,7 +47,7 @@ This is my latest build script which incorperates the "rsync" function to improv
 
    `git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git`
    
-   `sudo chmod 775 -R mtk-openwrt_build.sh`
+   `sudo chmod 775 -R BPI-R4_OpenWrt_mtk-feeds_Build`
 
 3. **Run the Script**:  
    * Make the script executable:  
