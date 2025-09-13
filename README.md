@@ -63,7 +63,7 @@ Images for BE14 without the eeprom issue - https://www.mediafire.com/file/tkrt60
 Images for BE14 with the eeprom issue - https://www.mediafire.com/file/dpm3s39j2satbxm/BPI_R4_Images-with-eeprom-patch-13.09.2025.zip
 
 ## **Notes**
-Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is a test patch that I've been working on.. I've applied the same logic from both the tx_power_check and EEPROM-contains-0s patches into the one patch so fell free to test. (work in progress)
+Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is a test patch that I've been working on.. I've applied the same logic from both the tx_power_check and EEPROM-contains-0s patches into the one patch so feel free to test. (work in progress)
 
 
 
