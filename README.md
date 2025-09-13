@@ -2,7 +2,7 @@
 
 Build with the latest Openwrt kernels and the latest mtk-openwrt-feeds...
 
-This is my latest evolving build script which incorperates the "rsync" function to improve the handling of scripts and patches. I've also include a new option to clone the main repos from a local repo. 
+This is my latest build script which incorperates the "rsync" function to improve the handling of scripts and patches. I've also include a new option to clone the main repos from a local repo. 
 
 ## **To build with the latest kernel and mtk-openwrt-feeds**
 
@@ -57,7 +57,7 @@ This is my latest evolving build script which incorperates the "rsync" function 
      `./mtk-openwrt_build.sh`
 
 ## **Notes**
-Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is my own modified version of both the "99999_tx_power_check.patch" & "9997-use-tx_power-from-default-fw-if-EEPROM-contains-0s.patch" patches.. I've combined the same logic from both patches and applied it into the one patch.
+Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is a test patch that I've been working on.. I've applied the same logic from both the tx_power_check and EEPROM-contains-0s patches into the one patch so fell free to test. (work in progress)
 
 
 
