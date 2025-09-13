@@ -41,7 +41,7 @@ This is my latest build script which incorperates the "rsync" function to improv
 1. **Prerequisites**: Ensure you have a compatible build environment, such as **Ubuntu 24.04 LTS**. You will also need to install `dos2unix` & `rsync`:  
    `sudo apt update` 
    
-   `sudo apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev file wget dos2unix rsync`
+   `sudo apt install build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools swig unzip zlib1g-dev file wget dos2unix rsync`
 
 2. **Clone repo**:
 
@@ -55,6 +55,12 @@ This is my latest build script which incorperates the "rsync" function to improv
      
    * Execute the script:  
      `./mtk-openwrt_build.sh`
+	 
+### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
+
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/tkrt60a2nig7ke8/BPI_R4_Images-with-no-eeprom-fix-13.09.2025.zip
+
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/dpm3s39j2satbxm/BPI_R4_Images-with-eeprom-patch-13.09.2025.zip
 
 ## **Notes**
 Please Note - The "99999-mt7996-eeprom-fix-0s.patch" is a test patch that I've been working on.. I've applied the same logic from both the tx_power_check and EEPROM-contains-0s patches into the one patch so fell free to test. (work in progress)
