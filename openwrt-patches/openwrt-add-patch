@@ -1,4 +1,2 @@
 regdb.Makefile:package/firmware/wireless-regdb/Makefile
 package/network/utils/iwinfo/patches/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch
-Cleanup.Makefile:package/custom-cleanup/Makefile
-
