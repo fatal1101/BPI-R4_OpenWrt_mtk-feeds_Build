@@ -13,7 +13,7 @@ This is my latest build script which incorperates the "rsync" function to improv
 3. If you want to target a specific commit use the full commit hash e.g... OPENWRT_COMMIT="b4b9288f2aa3dd1a759e5effbc8378f614bd5755"
 
 4. I've add an optional function to clone from a local repo instead of pointing to the openwrt or mtk-openwrt-feeds repos to clone.
-	* saves a lot of time when testing but it's optional, default will clone from the online repos
+	 * saves a lot of time when testing but it's optional, default will clone from the online repos
 	 * I've added a new repo with a small shell script to automate the updating of both "openwrt" and "mtk-openwrt-feeds" local repositories, to keep them up to date.
 
 5. Added two new directories to place all patches and files into, one for "openwrt-patches" and the other for all "mtk-patches" 
@@ -74,8 +74,6 @@ Testing the new "99999-mt7996-eeprom-fix-0s.patch" is now complete and I can con
 
 4. - After another reboot this would correct and the Maximum transmit power would show correctly as `17dBm` but the current power would show full power e.g `27 dBm`
 
-I had some time today to finish testing and traced out the logs for what's actually going on and my initial theory with a racing condition was incorrect.. 
-
 The Chain of Evidence in the Logs
 
 5. hostapd Fails on MLD
@@ -106,7 +104,7 @@ My faulty BE14 containing 0s was the first problem, which this new kernel patch 
 
 Bad news for those with the really bad BE14 cards, currently while you have mld configured in your wireless config, no patch will fix this issue, until the deeper bug in the Wi-Fi 7 driver's is fixed first.
 
-Good news is if you happey with no mld then this patch works perfectly, and once the current bug with the Wi-Fi 7 mld driver is fixed it will work perfectly for mld as well.
+Good news is if your happey with no mld then this patch works perfectly, and once the current bug with the Wi-Fi 7 mld driver is fixed it will work perfectly for mld as well.
 
 
 
