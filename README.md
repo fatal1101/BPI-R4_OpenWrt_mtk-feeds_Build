@@ -58,9 +58,11 @@ This is my latest build script which incorperates the "rsync" function to improv
 	 
 ### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
 
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/tkrt60a2nig7ke8/BPI_R4_Images-with-no-eeprom-fix-13.09.2025.zip
+Images with the eeprom patch applied.. I've removed mld from the wireless config in this image due to the current driver issue with mld.
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/46qk77uoh2davtd/BPI_R4_Images-with-eeprom-fix-19.09.2025.zip
 
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/dpm3s39j2satbxm/BPI_R4_Images-with-eeprom-patch-13.09.2025.zip
+Standard images with no eeprom patched with mld..
+Images for BE14 without the eeprom issue - https://www.mediafire.com/file/61h5fw875hzzz54/BPI_R4_Images-with-no-eeprom-fix-19.09.2025.zip
 
 ## **Notes**
 
