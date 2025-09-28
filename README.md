@@ -77,16 +77,16 @@ Script is updated to compile the new patch, if you don't need it then just remov
 If you want to test this new patch without using this script.. 
 
 1. bpi-r4-eeprom.bin
-   *mkdir -p openwrt/package/firmware/bpi-r4-eeprom-data/files
-   *cp openwrt/package/firmware/bpi-r4-eeprom-data/files/bpi-r4-eeprom.bin
+	 * mkdir -p openwrt/package/firmware/bpi-r4-eeprom-data/files
+	 * openwrt/package/firmware/bpi-r4-eeprom-data/files/bpi-r4-eeprom.bin
 
 2. epprom.bin_Makefile
-   *rename "epprom.bin_Makefile to Makefile
-   *cp package/firmware/bpi-r4-eeprom-data/Makefile
+	 * rename "epprom.bin_Makefile to Makefile
+	 * cp package/firmware/bpi-r4-eeprom-data/Makefile
 
 3. 0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
-   *cp autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
+	 * cp autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
 
 4. CONFIG_PACKAGE_bpi-r4-eeprom-data=y
-   *Add "CONFIG_PACKAGE_bpi-r4-eeprom-data=y" into your defconfig before compiling.
+	 * Add "CONFIG_PACKAGE_bpi-r4-eeprom-data=y" into your defconfig before compiling.
 
