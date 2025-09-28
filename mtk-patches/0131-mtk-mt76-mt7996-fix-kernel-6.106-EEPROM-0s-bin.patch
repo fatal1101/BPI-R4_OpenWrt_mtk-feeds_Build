@@ -1,14 +1,14 @@
-From f806acbd44b55b5f6de7ea16d3d84662cec6c98d Mon Sep 17 00:00:00 2001
+From e6ec46848fc721796bf636bf3fce313fcc86ce0f Mon Sep 17 00:00:00 2001
 From: Gilly1970 <gilroyscott@hotmail.com>
-Date: Sun, 21 Sep 2025 22:48:08 +1000
-Subject: [PATCH] 0129-mtk-mt76-mt7996-fix-kernel-6.104-EEPROM-0s
+Date: Sat, 27 Sep 2025 13:04:10 +1000
+Subject: [PATCH] 0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-new-bin
 
 ---
- mt7996/eeprom.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 49 insertions(+), 1 deletion(-)
+ mt7996/eeprom.c | 71 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
 diff --git a/mt7996/eeprom.c b/mt7996/eeprom.c
-index 612ff3f..08f19d7 100644
+index 612ff3f..e1168cf 100644
 --- a/mt7996/eeprom.c
 +++ b/mt7996/eeprom.c
 @@ -209,6 +209,44 @@ static bool mt7996_eeprom_variant_valid(struct mt7996_dev *dev, const u8 *def)
@@ -56,32 +56,53 @@ index 612ff3f..08f19d7 100644
  static int
  mt7996_eeprom_check_or_use_default(struct mt7996_dev *dev, bool use_default)
  {
-@@ -262,6 +300,8 @@ mt7996_eeprom_load_bin(struct mt7996_dev *dev)
+@@ -262,6 +300,9 @@ mt7996_eeprom_load_bin(struct mt7996_dev *dev)
  	memcpy(eeprom, fw->data, MT7996_EEPROM_SIZE);
  	dev->flash_mode = true;
  
++	/* Apply Tx Power fixups from default firmware EEPROM */
 +	mt7996_eeprom_fixup_tx_power(dev, fw->data);
 +
  out:
  	release_firmware(fw);
  	return ret;
-@@ -367,7 +407,15 @@ static int mt7996_eeprom_load(struct mt7996_dev *dev)
+@@ -367,6 +408,36 @@ static int mt7996_eeprom_load(struct mt7996_dev *dev)
  				goto out;
  			}
  		}
--	}
 +
-+		/* read tx_power values from fw */
++		/* check for faulty EEPROM and load board-specific override */
 +		u8 *eeprom = dev->mt76.eeprom.data;
 +		if (!eeprom[MT_EE_TX0_POWER_2G] || !eeprom[MT_EE_TX0_POWER_5G] || !eeprom[MT_EE_TX0_POWER_6G] ) {
++			dev_warn(dev->mt76.dev, "Faulty EEPROM detected, attempting to load board-specific bin\n");
++
++			/* Set bin file mode and specify our custom file */
++			dev->bin_file_mode = true;
++			dev->mt76.bin_file_name = "mediatek/mt7988/bpi-r4-eeprom.bin";
++
++			/* Allocate memory for the eeprom data */
++			dev->mt76.eeprom.size = MT7996_EEPROM_SIZE;
++			if (!dev->mt76.eeprom.data)
++				dev->mt76.eeprom.data = devm_kzalloc(dev->mt76.dev,
++								     dev->mt76.eeprom.size,
++								     GFP_KERNEL);
++			if (!dev->mt76.eeprom.data)
++				return -ENOMEM;
++
++			/* Attempt to load our custom bin file */
++			if (mt7996_eeprom_load_bin(dev) == 0) {
++				dev_warn(dev->mt76.dev, "Successfully loaded board-specific EEPROM\n");
++				return 0; /* Success, exit function */
++			}
++
++			/* If custom bin fails, fall back to generic default */
++			dev_warn(dev->mt76.dev, "Board-specific EEPROM not found, using generic default\n");
 +			use_default = true;
 +			goto out;
-+		}	
-+
-+}
++		}
+ 	}
  
  out:
- 	return mt7996_eeprom_check_or_use_default(dev, use_default);
 -- 
 2.43.0
 

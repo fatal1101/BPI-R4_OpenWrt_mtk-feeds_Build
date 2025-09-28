@@ -66,17 +66,27 @@ Images for BE14 without the eeprom issue - https://www.mediafire.com/file/qye0a8
 
 ## **Notes**
 
-Updated patch to "0130-mtk-mt76-mt7996-fix-kernel-6.104-EEPROM-0s.patch" 
+I will no longer be making patches for the duplicated ports issue. The updated script now handles this automatically during the build process and a patch is no longer need when using this script. (hopefully a permanent fix will come from MediaTek)
 
-Mediatek are now deleting all patches in the "openwrt/package/kernel/mt76/patches/" directory, unless they follow the correct mtk patch format. I've renamed this patch to follow this new format which stops it from being auto removed from the build.
+The current driver bug and setting the tx power value is still causing the 255 dBm (2147483647 mW) value to populate into the drop down menu. This bug also effects BE14 cards with good eeproms as well, not just the cards that contain 0s.
 
+For those with the bad BE14 cards that contain 0s. I've extracted the eeprom.bin from my good BE14 card which my latest patch now uses instead of the default fallback eeprom.bin that comes with the mt79 drivers. The default driver bin file is generic and is only there as a fallback solution not a permanent one. It doesn't contain all the necessary calibration code from an actual BE14 eeprom itself. So I thought this approach might be a better long term solution over the current generic one. Still trialling this new approach but until the current 255 dBm (2147483647 mW) bug is fixed. With the proper eeprom.bin you can now set the tx power values on all three channels, you just need to reboot after setting them.
 
+Script is updated to compile the new patch, if you don't need it then just remove the relevant entries from the openwrt-add-patch and mtk-add-patch files.
 
+If you want to test this new patch without using this script.. 
 
+1. bpi-r4-eeprom.bin
+   mkdir -p openwrt/package/firmware/bpi-r4-eeprom-data/files
+   cp openwrt/package/firmware/bpi-r4-eeprom-data/files/bpi-r4-eeprom.bin
 
+2. epprom.bin_Makefile
+   rename "epprom.bin_Makefile to Makefile
+   cp package/firmware/bpi-r4-eeprom-data/Makefile
 
+3. 0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
+   cp autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
 
-
-
-
+4. CONFIG_PACKAGE_bpi-r4-eeprom-data=y
+   Add "CONFIG_PACKAGE_bpi-r4-eeprom-data=y" into your defconfig before compiling.
 

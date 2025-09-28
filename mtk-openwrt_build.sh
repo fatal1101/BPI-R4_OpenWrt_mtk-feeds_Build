@@ -63,6 +63,12 @@ readonly OPENWRT_DIR="openwrt"
 readonly MTK_FEEDS_DIR="mtk-feeds"
 readonly SCRIPT_EXECUTABLE_NAME=$(basename "$0")
 
+# --- NEW VARIABLES FOR AUTOMATED FIXES ---
+# Note: This assumes the script is run from a directory that contains both the 'openwrt' and 'mtk-feeds' directories.
+readonly RULES_FILE="$MTK_FEEDS_DIR/autobuild/unified/rules"
+readonly ORIG_FILE="$OPENWRT_DIR/target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig"
+readonly BUILD_PROFILE="filogic-mac80211-mt7988_rfb-mt7996"
+
 
 # --- Functions ---
 
@@ -362,16 +368,50 @@ main() {
     remove_files_from_list "$MTK_REMOVE_LIST" "$MTK_FEEDS_DIR" "MTK"
     apply_files_from_list "$OPENWRT_ADD_LIST" "$SOURCE_OPENWRT_PATCH_DIR" "$OPENWRT_DIR" "OpenWrt"
     apply_files_from_list "$MTK_ADD_LIST" "$SOURCE_MTK_FEEDS_PATCH_DIR" "$MTK_FEEDS_DIR" "MTK"
-    
+
     copy_custom_files
 
     configure_build
     
-    log "--- Starting the MediaTek autobuild script for the base image... ---"
+    # =========================================================================
+    # MODIFIED SECTION STARTS HERE
+    # =========================================================================
+    log "--- Starting MediaTek autobuild script ---"
+
+    # --- STAGE 1: Run Autobuild PREPARE ---
+    # This applies all the mtk-feeds patches, which creates the files we need to fix.
+    log "--- Running Autobuild Prepare Stage ---"
     (
         cd "$OPENWRT_DIR"
-        bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" filogic-mac80211-mt7988_rfb-mt7996 log_file=make
+        bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" "$BUILD_PROFILE" prepare
     )
+
+    # --- STAGE 2: APPLY AUTOMATED FIXES ---
+    # This section runs AFTER prepare is finished.
+    log "--- Applying Automated Fixes ---"
+    # Fix 1: Correct the build command in the rules file
+    if [ -f "$RULES_FILE" ]; then
+        log "Patching rules file to fix build command..."
+        sed -i 's/ V=\${verbose}//' "$RULES_FILE"
+    fi
+    # Fix 2: Delete the problematic .orig file
+    if [ -f "$ORIG_FILE" ]; then
+        log "Deleting 02_network.orig file..."
+        rm -f "$ORIG_FILE"
+    fi
+
+    # --- STAGE 3: Run Autobuild BUILD ---
+    # Now, with all sources fixed, we run the actual compilation.
+    log "--- Running Autobuild Build Stage ---"
+    (
+        cd "$OPENWRT_DIR"
+        bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" build log_file=make
+    )
+
+    # =========================================================================
+    # MODIFIED SECTION ENDS HERE
+    # =========================================================================
+    
     log "--- Base build process finished successfully! ---"
     log "--- You can find the base images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
 
