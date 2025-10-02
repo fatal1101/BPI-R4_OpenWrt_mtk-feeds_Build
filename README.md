@@ -68,9 +68,9 @@ Images for BE14 without the eeprom issue - https://www.mediafire.com/file/qye0a8
 
 I will no longer be making patches for the duplicated ports issue. The updated script now handles this automatically during the build process and a patch is no longer need when using this script. (hopefully a permanent fix will come from MediaTek)
 
-The current driver bug and setting the tx power value is still causing the 255 dBm (2147483647 mW) value to populate into the drop down menu. This bug also effects BE14 cards with good eeproms as well, not just the cards that contain 0s.
+The current bug and setting the tx power value is still causing the 255 dBm (2147483647 mW) value to populate into the drop down menu. This bug also effects BE14 cards with good eeproms as well, not just the cards that contain 0s.
 
-For those with the bad BE14 cards that contain 0s. I've extracted the eeprom.bin from my good BE14 card which my latest patch now uses instead of the default fallback eeprom.bin that comes with the mt79 drivers. The default driver bin file is generic and is only there as a fallback solution not a permanent one. It doesn't contain all the necessary calibration code from an actual BE14 eeprom itself. So I thought this approach might be a better long term solution over the current generic one. Still trialling this new approach but now with the proper eeprom.bin you can now set the tx power values on all three channels, you just need to reboot after setting them.
+Experimental patch for the BE14 cards with the 0'd eeproms - I've extracted the eeprom.bin from my good BE14 card which this new test patch uses instead of the default fallback .bin that comes with the default dirvers. From my initial testing I'm able to correctly set the tx power value on all three raido's.
 
 Script is updated to compile the new patch, if you don't need it then just remove the relevant entries from the openwrt-add-patch and mtk-add-patch files.
 
@@ -89,4 +89,7 @@ If you want to test this new patch without using this script..
 
 4. CONFIG_PACKAGE_bpi-r4-eeprom-data=y
 	 * Add "CONFIG_PACKAGE_bpi-r4-eeprom-data=y" into your defconfig before compiling.
+
+5. To set tx power value add sku_idx to wireless config e.g. config wifi-device 'radio0'
+	 * option sku_idx '0'
 
