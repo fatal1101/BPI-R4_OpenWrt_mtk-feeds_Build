@@ -1,14 +1,14 @@
-From e6ec46848fc721796bf636bf3fce313fcc86ce0f Mon Sep 17 00:00:00 2001
+From a4bc4c9c439d6d747f4df58da184788d9c3f7247 Mon Sep 17 00:00:00 2001
 From: Gilly1970 <gilroyscott@hotmail.com>
-Date: Sat, 27 Sep 2025 13:04:10 +1000
-Subject: [PATCH] 0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-new-bin
+Date: Fri, 3 Oct 2025 14:49:11 +1000
+Subject: [PATCH] 0133-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin
 
 ---
  mt7996/eeprom.c | 71 +++++++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 71 insertions(+)
 
 diff --git a/mt7996/eeprom.c b/mt7996/eeprom.c
-index 612ff3f..e1168cf 100644
+index 612ff3f..997492d 100644
 --- a/mt7996/eeprom.c
 +++ b/mt7996/eeprom.c
 @@ -209,6 +209,44 @@ static bool mt7996_eeprom_variant_valid(struct mt7996_dev *dev, const u8 *def)
@@ -78,7 +78,7 @@ index 612ff3f..e1168cf 100644
 +
 +			/* Set bin file mode and specify our custom file */
 +			dev->bin_file_mode = true;
-+			dev->mt76.bin_file_name = "mediatek/mt7988/bpi-r4-eeprom.bin";
++			dev->mt76.bin_file_name = "mediatek/mt7996/bpi-r4-eeprom.bin";
 +
 +			/* Allocate memory for the eeprom data */
 +			dev->mt76.eeprom.size = MT7996_EEPROM_SIZE;

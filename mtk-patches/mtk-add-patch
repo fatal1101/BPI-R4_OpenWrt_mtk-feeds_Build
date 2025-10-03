@@ -1,4 +1,4 @@
 autobuild/unified/filogic/mac80211/24.10/files/package/firmware/wireless-regdb/patches/500-tx_power.patch
 24.10/patches-base/1007-mt7988a.dtsi.patch
-autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/0131-mtk-mt76-mt7996-fix-kernel-6.106-EEPROM-0s-bin.patch
+autobuild/unified/filogic/mac80211/24.10/files/package/kernel/mt76/patches/0131-mtk-mt76-mt7996-fix-kernel-6.108-EEPROM-0s-bin.patch
 

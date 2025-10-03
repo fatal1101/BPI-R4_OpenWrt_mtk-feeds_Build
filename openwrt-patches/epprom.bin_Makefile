@@ -30,8 +30,8 @@ endef
 
 # This is the crucial part: defining where to install the files
 define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR) $(1)/lib/firmware/mediatek/mt7988
-	$(INSTALL_DATA) ./files/bpi-r4-eeprom.bin $(1)/lib/firmware/mediatek/mt7988/
+	$(INSTALL_DIR) $(1)/lib/firmware/mediatek/mt7996
+	$(INSTALL_DATA) ./files/bpi-r4-eeprom.bin $(1)/lib/firmware/mediatek/mt7996/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))

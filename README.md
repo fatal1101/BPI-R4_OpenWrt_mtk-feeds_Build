@@ -59,10 +59,10 @@ This is my latest build script which incorperates the "rsync" function to improv
 ### **For latest compiled bpi-r4 sysupgradeb/sdcard images can be downloaded from mediafire..**
 
 Images with the eeprom patch applied..
-Images for BE14 with the eeprom issue - https://www.mediafire.com/file/4qtkr38l5xugzyk/BPI_R4_Images-with-no-eeprom-fix-22.09.2025.zip
+Images for BE14 with the eeprom issue - https://www.mediafire.com/file/3fseqdvv9oirbyz/BPI_R4_Images-with-eeprom-fix-03.10.2025.zip
 
 Standard images with no eeprom patched..
-Images for BE14 without the eeprom issue - https://www.mediafire.com/file/qye0a8pok8tv0iy/BPI_R4_Images-with-eeprom-fix-22.09.2025.zip
+Images for BE14 without the eeprom issue - http://www.mediafire.com/file/rqy5w7s4u7dl8rj/BPI_R4_Images-with-no-eeprom-fix-03.10.2025.zip
 
 ## **Notes**
 
