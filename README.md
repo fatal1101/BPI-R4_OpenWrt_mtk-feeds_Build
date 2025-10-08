@@ -66,6 +66,8 @@ Images for BE14 without the eeprom issue - http://www.mediafire.com/file/rqy5w7s
 
 ## **Notes**
 
+Add new db patched which adds the "wmmrule=ETSI" rule to all countries that have a valide 6GHz entry. Resolves the strict wwm rule which effects all countries that come under DFS-FCC and DFS-ETSI and if not found, defaulting back to world 00.
+
 I will no longer be making patches for the duplicated ports issue. The updated script now handles this automatically during the build process and a patch is no longer need when using this script. (hopefully a permanent fix will come from MediaTek)
 
 The current bug and setting the tx power value is still causing the 255 dBm (2147483647 mW) value to populate into the drop down menu. This bug also effects BE14 cards with good eeproms as well, not just the cards that contain 0s.
