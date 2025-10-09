@@ -66,7 +66,7 @@ Images for BE14 without the eeprom issue - http://www.mediafire.com/file/rqy5w7s
 
 ## **Notes**
 
-Add new db patched which adds the "wmmrule=ETSI" rule to all countries that have a valide 6GHz entry. Resolves the strict wwm rule which effects all countries that come under DFS-FCC and DFS-ETSI and if not found, defaulting back to world 00.
+Add new db patched which adds the "wmmrule=ETSI" rule to all countries that have a valide 6GHz entry.
 
 I will no longer be making patches for the duplicated ports issue. The updated script now handles this automatically during the build process and a patch is no longer need when using this script. (hopefully a permanent fix will come from MediaTek)
 
