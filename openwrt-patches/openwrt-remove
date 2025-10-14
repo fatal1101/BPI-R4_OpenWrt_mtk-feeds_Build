@@ -1,2 +1,2 @@
 package/firmware/wireless-regdb/patches/*.*
-
+package/firmware/wireless-regdb/Makefile
