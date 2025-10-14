@@ -3,4 +3,4 @@ package/firmware/bpi-r4-eeprom-data/files/bpi-r4-eeprom.bin
 epprom.bin_Makefile:package/firmware/bpi-r4-eeprom-data/Makefile
 package/firmware/wireless-regdb/patches/450-wmm-rule-regd-6GHz.patch
 regdb.Makefile:package/firmware/wireless-regdb/Makefile
-
+500-tx_power.patch:package/firmware/wireless-regdb/patches/500-tx_power.patch
