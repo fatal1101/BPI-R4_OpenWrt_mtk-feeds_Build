@@ -67,9 +67,8 @@ jobs:
 
       - name: Capture commits
         run: |
-          cd openwrt
-          OPENWRT_COMMIT=$(git rev-parse HEAD)
-          MTK_FEEDS_COMMIT=$(git -C feeds/mtk rev-parse HEAD)
+          OPENWRT_COMMIT=$(git -C openwrt rev-parse HEAD)
+          MTK_FEEDS_COMMIT=$(git -C mtk-feeds rev-parse HEAD)
           echo "OpenWrt commit: $OPENWRT_COMMIT" > bin/targets/mediatek/filogic/commits.txt
           echo "MediaTek feeds commit: $MTK_FEEDS_COMMIT" >> bin/targets/mediatek/filogic/commits.txt
 
