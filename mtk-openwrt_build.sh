@@ -38,7 +38,7 @@ readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
 #readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
 
 OPENWRT_BRANCH="openwrt-24.10"
-readonly OPENWRT_COMMIT="6e068b7052cccadc7e3543ca6741ece26333097e"
+readonly OPENWRT_COMMIT=""
 
 # Mediatek Feeds Source Details
 # --- Use this line for remote cloning ---
@@ -47,7 +47,7 @@ readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-fe
 #readonly MTK_FEEDS_REPO="/home/gilly/repos/mtk-openwrt-feeds"
 
 readonly MTK_FEEDS_BRANCH="master"
-readonly MTK_FEEDS_COMMIT="e3671871d4d979499d46030bb5032708efd00a61"
+readonly MTK_FEEDS_COMMIT=""
 
 # --- Directory and File Configuration ---
 readonly SOURCE_DEFAULT_CONFIG_DIR="config"
