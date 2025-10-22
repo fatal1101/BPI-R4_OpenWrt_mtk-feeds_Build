@@ -54,7 +54,7 @@ jobs:
           df -h
           echo "CPU Cores:"
           nproc
-
+          
       - name: Run OpenWrt Build Script
         run: |
           echo "Making build script executable..."
