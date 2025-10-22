@@ -65,6 +65,14 @@ jobs:
 
           echo "Build script finished. Checking for compiled firmware..."
 
+        - name: Capture commits
+        run: |
+          cd openwrt
+          OPENWRT_COMMIT=$(git rev-parse HEAD)
+          MTK_FEEDS_COMMIT=$(git -C feeds/mtk_openwrt_feed rev-parse HEAD)
+          echo "OpenWrt commit: $OPENWRT_COMMIT" > bin/targets/mediatek/filogic/commits.txt
+          echo "MediaTek feeds commit: $MTK_FEEDS_COMMIT" >> bin/targets/mediatek/filogic/commits.txt
+
 
       - name: Compress all packages
         run: |
@@ -100,6 +108,12 @@ jobs:
 
       - name: Extract artifacts
         run: tar xf bpi_r4-images.tar
+        
+      - name: Get commits info
+        run: |
+          echo "COMMITS<<EOF" >> $GITHUB_ENV
+          cat bin/targets/mediatek/filogic/commits.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Get current date
         run: echo "RELEASE_DATE=$(date +%F)" >> $GITHUB_ENV
@@ -112,6 +126,9 @@ jobs:
           name: OpenWRT BPI-R4 with MTK Feed with my packages - ${{ env.RELEASE_DATE }}
           body: |
             Updated prebuilt images for BPI-R4 with MTK feed and my custom packages
+
+            
+            ${{ env.COMMITS }}
 
             
       - name: Clean up old releases
