@@ -1,6 +1,9 @@
 
 on:
-  workflow_dispatch: # Позволяет запускать вручную из вкладки "Actions"
+push:
+    branches:
+      - main # Запускать при пуше в ветку main
+workflow_dispatch: # Позволяет запускать вручную из вкладки "Actions"
 
 jobs:
   build:
