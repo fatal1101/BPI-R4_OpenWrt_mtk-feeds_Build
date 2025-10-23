@@ -45,7 +45,7 @@ This is my latest build script which incorperates the "rsync" function to improv
 
 2. **Clone repo**:
 
-   `git clone https://github.com/Gilly1970/BPI-R4_OpenWrt_mtk-feeds_Build.git`
+   `git clone https://github.com/fatal1101/BPI-R4_OpenWrt_mtk-feeds_Build.git`
    
    `sudo chmod 775 -R BPI-R4_OpenWrt_mtk-feeds_Build`
 
