@@ -33,7 +33,7 @@ fi
 
 # OpenWrt Source Details
 # --- Use this line for remote cloning ---
-readonly OPENWRT_REPO="https://github.com/fatal1101/openwrt.git"
+readonly OPENWRT_REPO="https://github.com/openwrt/openwrt.git"
 # --- Use this line for local testing (uncomment and set your path) ---
 #readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
 
