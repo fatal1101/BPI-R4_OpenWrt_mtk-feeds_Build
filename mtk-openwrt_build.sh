@@ -38,7 +38,7 @@ readonly OPENWRT_REPO="https://github.com/openwrt/openwrt.git"
 #readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
 
 OPENWRT_BRANCH="openwrt-24.10"
-readonly OPENWRT_COMMIT="0211ecf682d5fb3b83c0b16ad0222b4acacefd9a"
+readonly OPENWRT_COMMIT=""
 
 # Mediatek Feeds Source Details
 # --- Use this line for remote cloning ---
