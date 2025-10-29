@@ -30,6 +30,12 @@ CONFIG_BUSYBOX_CONFIG_MPSTAT=y
 # CONFIG_PACKAGE_trusted-firmware-a-mt7986-ram-ddr3 is not set
 # CONFIG_PACKAGE_trusted-firmware-a-mt7986-ram-ddr4 is not set
 # CONFIG_PACKAGE_trusted-firmware-a-mt7988-ram-comb is not set
+CONFIG_PACKAGE_kmod-fs-btrfs=y
+CONFIG_PACKAGE_kmod-nft-compat=y
+CONFIG_PACKAGE_kmod-ipt-nat6=y
+CONFIG_PACKAGE_kmod-ipt-physdev=y
+CONFIG_PACKAGE_kmod-nf-ipvs=y
+CONFIG_PACKAGE_kmod-veth=y
 CONFIG_PACKAGE_kmod-nft-queue=y
 CONFIG_PACKAGE_kmod-ata-core=y
 CONFIG_PACKAGE_kmod-scsi-generic=y
