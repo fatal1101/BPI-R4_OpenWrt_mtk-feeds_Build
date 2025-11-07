@@ -37,7 +37,7 @@ readonly OPENWRT_REPO="https://github.com/openwrt/openwrt.git"
 # --- Use this line for local testing (uncomment and set your path) ---
 #readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
 
-OPENWRT_BRANCH="main"
+OPENWRT_BRANCH="openwrt-24.10"
 readonly OPENWRT_COMMIT=""
 
 # Mediatek Feeds Source Details
