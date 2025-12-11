@@ -1,2 +1,2 @@
 package/firmware/wireless-regdb/patches/450-wmm-rule-regd-6GHz.patch
-package/network/utils/iwinfo/patches/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch
+#package/network/utils/iwinfo/patches/200-v.kosikhin-libiwinfo-fix_noise_reading_for_radios.patch
