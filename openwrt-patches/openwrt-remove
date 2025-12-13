@@ -1,1 +1,2 @@
 /package/network/services/hostapd/patches/030-Revert-nl80211-Accept-a-global-nl80211-event-to-a-br.patch
+/package/network/services/hostapd/patches/140-tests-Makefile-make-run-tests-with-CONFIG_TLS.patch
