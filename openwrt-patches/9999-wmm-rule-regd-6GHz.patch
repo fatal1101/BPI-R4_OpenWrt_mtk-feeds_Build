@@ -1,0 +1,571 @@
+From d939c1afdc7c3c5c5e1071680c969bd9932402dd Mon Sep 17 00:00:00 2001
+From: Gilly1970 <gilroyscott@hotmail.com>
+Date: Fri, 12 Dec 2025 00:10:25 +1000
+Subject: [PATCH] 455-wmm-rule-regd-6GHz
+
+---
+ db.txt | 124 ++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 62 insertions(+), 62 deletions(-)
+
+diff --git a/db.txt b/db.txt
+index 9f59356..ca75528 100644
+--- a/db.txt
++++ b/db.txt
+@@ -27,7 +27,7 @@ country 00:
+ 	# Channel 149 - 177
+ 	(5735 - 5895 @ 160), (20), NO-IR
+ 	# WiFi 6E
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 	# IEEE 802.11ad (60GHz), channels 1..3
+ 	(57240 - 63720 @ 2160), (0)
+ 
+@@ -46,7 +46,7 @@ country AD: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -58,7 +58,7 @@ country AE: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country AF: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -89,7 +89,7 @@ country AL: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # 2.4 GHz https://www.psrc.am/contents/document/4749
+@@ -113,7 +113,7 @@ country AR: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country AS: DFS-FCC
+ 	(2402 - 2472 @ 40), (30)
+@@ -181,7 +181,7 @@ country AU: DFS-ETSI
+ 	(5850 - 5875 @ 20), (25 mW), AUTO-BW
+ 
+ 	# Item 63AA (25 mW if outdoors)
+-	(5925 - 6425 @ 160), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 160), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ 	# Item 65
+ 	(57000 - 71000 @ 2160), (20000 mW), NO-OUTDOOR
+@@ -196,7 +196,7 @@ country AZ: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+ 	(5170 - 5250 @ 80), (18), AUTO-BW
+ 	(5250 - 5330 @ 80), (18), DFS, AUTO-BW
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # BA as part of CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+ # and 2006/771/EC (amended by 2008/432/EC, Short-Range Devices, EN 300 440)
+@@ -213,7 +213,7 @@ country BA: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -312,7 +312,7 @@ country BH: DFS-ETSI
+ 	(5150 - 5350 @ 80), (200 mW), DFS, NO-OUTDOOR
+ 	(5470 - 5725 @ 80), (27), DFS
+ 	(5725 - 5875 @ 80), (24), DFS
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+ country BL: DFS-ETSI
+@@ -351,7 +351,7 @@ country BR: DFS-FCC
+ 	(5250 - 5350 @ 80), (27), NO-OUTDOOR, DFS, AUTO-BW
+ 	(5470 - 5725 @ 160), (27), DFS, AUTO-BW
+ 	(5725 - 5850 @ 80), (30), AUTO-BW
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 	# EIRP=40dBm (43dBm peak)
+ 	(57000 - 71000 @ 2160), (40)
+ 
+@@ -390,7 +390,7 @@ country CA: DFS-FCC
+ 	(5470 - 5600 @ 80), (24), DFS
+ 	(5650 - 5730 @ 80), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # http://www.art-rca.org
+@@ -440,7 +440,7 @@ country CL: DFS-JP
+ 	(5170 - 5250 @ 80), (20), AUTO-BW
+ 	(5250 - 5330 @ 80), (20), DFS, AUTO-BW
+ 	(5735 - 5835 @ 80), (20)
+-	(5925 - 6425 @ 320), (12), NO-OUTDOOR
++	(5925 - 6425 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://wap.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2021/art_e4ae71252eab42928daf0ea620976e4e.html
+@@ -466,7 +466,7 @@ country CO: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://storage.googleapis.com/eleoscompliance1.appspot.com/public/PNAF%20modificaci%C3%B3n%20ALCA87_30_04_2021.pdf
+@@ -477,7 +477,7 @@ country CR: DFS-FCC
+ 	(5490 - 5730 @ 20), (30), DFS
+ 	(5735 - 5835 @ 20), (36)
+ 	(5875 - 5925 @ 20), (30)
+-	(5925 - 7125 @ 320), (30), NO-OUTDOOR
++	(5925 - 7125 @ 320), (30), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://www.mincom.gob.cu/es/marco-legal
+@@ -617,7 +617,7 @@ country DO: DFS-FCC
+ 	(5170 - 5250 @ 80), (17), AUTO-BW
+ 	(5250 - 5330 @ 80), (23), DFS, AUTO-BW
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 7125 @ 320), (15), NO-OUTDOOR
++	(5925 - 7125 @ 320), (15), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country DZ: DFS-JP
+ 	(2402 - 2482 @ 40), (20)
+@@ -663,7 +663,7 @@ country EG: DFS-ETSI
+ 	(2402 - 2483.5 @ 40), (100 mW), NO-OUTDOOR
+ 	(5150 - 5250 @ 80), (200 mW), AUTO-BW, NO-OUTDOOR, wmmrule=ETSI
+ 	(5250 - 5350 @ 80), (100 mW), DFS, AUTO-BW, NO-OUTDOOR, wmmrule=ETSI
+-	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+ # ES as part of EU/CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+@@ -769,7 +769,7 @@ country GE: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+ 	(5170 - 5250 @ 80), (18), AUTO-BW
+ 	(5250 - 5330 @ 80), (18), DFS, AUTO-BW
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -825,7 +825,7 @@ country GT:
+ 	(5150 - 5350 @ 80), (200 mW), NO-OUTDOOR
+ 	(5470 - 5725 @ 160), (250 mW), NO-OUTDOOR
+ 	(5725 - 5850 @ 80), (500 mW), NO-OUTDOOR
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, AUTO-BW
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, AUTO-BW, wmmrule=ETSI
+ 	(6425 - 6525 @ 80), (200 mW), NO-OUTDOOR, AUTO-BW
+ 	(6525 - 6875 @ 320), (150 mW), NO-OUTDOOR, AUTO-BW
+ 	(6875 - 7125 @ 160), (150 mW), NO-OUTDOOR, AUTO-BW
+@@ -854,7 +854,7 @@ country HK: DFS-ETSI
+ 	(5250 - 5350 @ 80), (23), DFS, AUTO-BW, NO-OUTDOOR
+ 	(5470 - 5730 @ 160), (27), DFS
+ 	(5730 - 5850 @ 80), (36)
+-	(5925 - 6425 @ 160), (14)
++	(5925 - 6425 @ 160), (14), wmmrule=ETSI
+ 
+ # Source:
+ # https://www.conatel.gob.hn/doc/Regulacion/resoluciones/2023/NR05-23.pdf
+@@ -864,7 +864,7 @@ country HN: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (12), NO-OUTDOOR, NO-IR
++	(5925 - 6425 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 	(57240 - 71000 @ 2160), (40)
+ 
+ country HR: DFS-ETSI
+@@ -922,7 +922,7 @@ country ID:
+ 	(2400 - 2483.5 @ 40), (500 mW), NO-OUTDOOR
+ 	(5150 - 5350 @ 160), (200 mW), NO-OUTDOOR
+ 	(5725 - 5825 @ 80), (200 mW), NO-OUTDOOR
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 64000 @ 2160), (10000 mW), NO-OUTDOOR
+ 
+ # IE as part of EU/CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+@@ -959,7 +959,7 @@ country IL: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), NO-OUTDOOR, DFS, AUTO-BW, wmmrule=ETSI
+ 	# Table B List of conditions, row 68a
+ 	(5725 - 5875 @ 80), (25 mW), AUTO-BW
+-	(5945 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5945 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://dot.gov.in/spectrummanagement/delicensing-24-24835-ghz-band-gsr-45-e-5150-5350-ghz-gsr-46-e-and-5725-5875-ghz
+@@ -995,7 +995,7 @@ country IS: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4 (ETSI EN 302 567)
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -1033,7 +1033,7 @@ country JO: DFS-ETSI
+ 	(5250 - 5350 @ 80), (23), DFS, AUTO-BW
+ 	(5470 - 5725 @ 80), (27), DFS, NO-OUTDOOR
+ 	(5725 - 5875 @ 80), (23), NO-OUTDOOR
+-	(5925 - 6425 @ 320), (23), NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 71000 @ 2160), (40)
+ 
+ # Source:
+@@ -1047,7 +1047,7 @@ country JP: DFS-JP
+ 	(5170 - 5250 @ 80), (20), AUTO-BW
+ 	(5250 - 5330 @ 80), (20), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (23), DFS
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 2-4 at 10mW,
+ 	# ref: http://www.arib.or.jp/english/html/overview/doc/1-STD-T74v1_1.pdf
+ 	(57000 - 66000 @ 2160), (10 mW)
+@@ -1062,7 +1062,7 @@ country KE: DFS-ETSI
+ 	(5250 - 5350 @ 80), (17), DFS, AUTO-BW
+ 	(5470 - 5725 @ 80), (24), DFS
+ 	(5725 - 5875 @ 40), (24), DFS
+-	(5925 - 6425 @ 320), (23), NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country KH: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -1099,7 +1099,7 @@ country KR: DFS-JP
+ 	(5470 - 5725 @ 160), (20), DFS
+ 	(5725 - 5850 @ 80), (23)
+ 	# 6 GHz band
+-	(5925 - 7125 @ 160), (15), NO-OUTDOOR
++	(5925 - 7125 @ 160), (15), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4
+ 	(57000 - 66000 @ 2160), (43)
+ 
+@@ -1110,7 +1110,7 @@ country KW: DFS-ETSI
+ 	(5170 - 5250 @ 80), (200 mW), AUTO-BW
+ 	(5250 - 5350 @ 80), (17), DFS, AUTO-BW
+ 	(5470 - 5825 @ 160), (24), DFS
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source: https://www.ofreg.ky/viewPDF/documents/2024-11-19-16-28-50-OfReg-WiFi-Permitted-Parameters-V2.pdf
+ country KY: DFS-FCC
+@@ -1119,7 +1119,7 @@ country KY: DFS-FCC
+ 	(5250 - 5350 @ 80), (250 mW), DFS, AUTO-BW
+ 	(5470 - 5730 @ 160), (250 mW), DFS
+ 	(5725 - 5875 @ 80), (1000 mW)
+-	(5925 - 6425 @ 320), (12), NO-OUTDOOR
++	(5925 - 6425 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 71000 @ 2160), (40)
+ 
+ # Source:
+@@ -1169,7 +1169,7 @@ country LI: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4 (ETSI EN 302 567)
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -1252,7 +1252,7 @@ country MA: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+ 	(5170 - 5250 @ 80), (20), AUTO-BW
+ 	(5250 - 5330 @ 80), (20), DFS, AUTO-BW
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # MC as part of CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+ # and 2006/771/EC (amended by 2008/432/EC, Short-Range Devices, EN 300 440)
+@@ -1269,7 +1269,7 @@ country MC: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # http://www.cnfr.md/index.php?pag=sec&id=117&l=en
+@@ -1289,7 +1289,7 @@ country MD: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # http://www.cept.org/files/1050/Tools%20and%20Services/EFIS%20-%20ECO%20Frequency%20Information%20System/National%20frequency%20tables/Montenegro%20NAFT%20-%202010.pdf
+@@ -1308,7 +1308,7 @@ country ME: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country MF: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -1338,7 +1338,7 @@ country MK: DFS-ETSI
+ 	(5470 - 5725 @ 160), (500 mW), DFS, wmmrule=ETSI
+ 	# short range devices (ETSI EN 300 440-1)
+ 	(5725 - 5875 @ 80), (25 mW)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -1350,7 +1350,7 @@ country MN: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (100mW)
++	(5925 - 6425 @ 320), (100mW), wmmrule=ETSI
+ 
+ # Source:
+ # https://bo.io.gov.mo/bo/i/2024/16/despce.asp#64
+@@ -1360,7 +1360,7 @@ country MO: DFS-FCC
+ 	(5250 - 5350 @ 80), (200 mW), DFS, AUTO-BW
+ 	(5470 - 5730 @ 160), (1000 mW), DFS
+ 	(5725 - 5850 @ 80), (1000 mW)
+-	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (10000 mW)
+ 
+ country MP: DFS-FCC
+@@ -1411,7 +1411,7 @@ country MU: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # http://www.cam.gov.mv/docs/tech_standards/TAM-TS-100-2004-WLAN.pdf
+@@ -1436,7 +1436,7 @@ country MX: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (12), NO-OUTDOOR
++	(5925 - 6425 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://www.mcmc.gov.my/skmmgovmy/media/General/CA-No-1-of-2022_-signed_19012022.pdf
+@@ -1446,7 +1446,7 @@ country MY: DFS-FCC
+ 	(5250 - 5330 @ 80), (1000 mW), DFS, AUTO-BW
+ 	(5490 - 5650 @ 160), (1000 mW), DFS
+ 	(5735 - 5835 @ 80), (1000 mW)
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://www.cran.na/yglilidy/2023/04/GG-8060-dated-3-April-2023.pdf
+@@ -1456,7 +1456,7 @@ country NA: DFS-ETSI
+ 	(5250 - 5350 @ 80), (20), DFS, AUTO-BW, NO-OUTDOOR
+ 	(5470 - 5725 @ 160), (21), DFS
+ 	(5725 - 5875 @ 80), (24), DFS
+-	(5925 - 6425 @ 320), (23), NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+ country NG: DFS-ETSI
+@@ -1531,7 +1531,7 @@ country NZ: DFS-ETSI
+ 	(5250 - 5350 @ 80), (27), DFS, AUTO-BW
+ 	(5470 - 5730 @ 160), (27), DFS
+ 	(5725 - 5875 @ 80), (36)
+-	(5925 - 6425 @ 320), (24), NO-OUTDOOR
++	(5925 - 6425 @ 320), (24), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 71000 @ 2160), (40)
+ 
+ country OM: DFS-ETSI
+@@ -1540,7 +1540,7 @@ country OM: DFS-ETSI
+ 	(5250 - 5350 @ 80), (20), DFS, AUTO-BW
+ 	(5470 - 5725 @ 160), (27), DFS
+ 	(5725 - 5850 @ 80), (28), DFS, NO-INDOOR
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+ # Source:
+@@ -1561,7 +1561,7 @@ country PE: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country PF: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -1593,7 +1593,7 @@ country PH: DFS-FCC
+ 	(5250 - 5350 @ 80), (23), DFS, AUTO-BW
+ 	(5470 - 5725 @ 160), (24), DFS
+ 	(5725 - 5850 @ 80), (24)
+-	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (24)
+ 
+ country PK:
+@@ -1603,7 +1603,7 @@ country PK:
+ 	# https://www.pta.gov.pk/assets/media/2024-09-23-WLAN-Framework-Final-05-09-2024.pdf
+ 	(2400 - 2500 @ 40), (30)
+ 	(5725 - 5875 @ 80), (30)
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # PL as part of EU/CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+ # and 2006/771/EC (amended by 2008/432/EC, Short-Range Devices, EN 300 440)
+@@ -1670,7 +1670,7 @@ country PY: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (12), NO-OUTDOOR
++	(5925 - 6425 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://www.cra.gov.qa/-/media/System/D/2/5/8/D258CF18B83A5613B0D590193CB799CB/Class-License-WIFI-6E-Final-English-032022--V3.ashx
+@@ -1680,7 +1680,7 @@ country QA: DFS-ETSI
+ 	(5250 - 5350 @ 80), (200 mW), NO-OUTDOOR, DFS, AUTO-BW
+ 	(5470 - 5725 @ 160), (100 mW), NO-OUTDOOR, DFS
+ 	(5725 - 5875 @ 80), (100 mW), NO-OUTDOOR, DFS
+-	(5925 - 6425 @ 320), (23), NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+ country RE: DFS-ETSI
+@@ -1723,7 +1723,7 @@ country RS: DFS-ETSI
+ 	(5470 - 5725 @ 160), (27), DFS
+ 	(5725 - 5850 @ 80), (24), DFS, AUTO-BW
+ 	(5850 - 5875 @ 20), (24), AUTO-BW
+-	(5925 - 6425 @ 320), (23), NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40)
+ 
+@@ -1732,7 +1732,7 @@ country RU:
+ 	(2400 - 2483.5 @ 40), (100mW)
+ 	(5150 - 5350 @ 160), (100 mW), NO-OUTDOOR
+ 	(5650 - 5850 @ 160), (100 mW), NO-OUTDOOR
+-	(5925 - 6425 @ 160), (100 mW), NO-OUTDOOR
++	(5925 - 6425 @ 160), (100 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Changes to NLA 124_Order №129_22042015.pdf
+ 	(57000 - 66000 @ 2160), (40), NO-OUTDOOR
+ 
+@@ -1749,7 +1749,7 @@ country SA: DFS-ETSI
+ 	(5170 - 5250 @ 80), (20), AUTO-BW
+ 	(5250 - 5330 @ 80), (20), DFS, AUTO-BW
+ 	(5490 - 5710 @ 160), (27), DFS
+-	(5925 - 7125 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 7125 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # SE as part of EU/CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+ # and 2006/771/EC (amended by 2008/432/EC, Short-Range Devices, EN 300 440)
+@@ -1793,7 +1793,7 @@ country SG: DFS-FCC
+         # happy and be able to use channel 144.
+ 	(5470 - 5730 @ 160), (500 mW), DFS
+ 	(5725 - 5850 @ 80), (1000 mW)
+-	(5945 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5945 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (10000 mW)
+ 
+ # SI as part of EU/CEPT accepted decisions 2005/513/EC (5GHz RLAN, EN 301 893)
+@@ -1858,7 +1858,7 @@ country SV: DFS-FCC
+ 	(5170 - 5250 @ 20), (17)
+ 	(5250 - 5330 @ 20), (23), DFS
+ 	(5735 - 5835 @ 20), (30)
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source:
+ # https://sytpra.gov.sy/public/uploads/files/%D8%A7%D9%84%D8%A7%D8%B7%D8%A7%D8%B1%20%D8%A7%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86%D9%8A/%D9%84%D9%88%D8%A7%D8%A6%D8%AD%20%D8%AA%D9%86%D8%B8%D9%8A%D9%85%D9%8A%D8%A9/%D9%84%D9%88%D8%A7%D8%A6%D8%AD%20%D8%A7%D9%84%D8%B7%D9%8A%D9%81%20%D8%A7%D9%84%D8%AA%D8%B1%D8%AF%D8%AF%D9%8A%20%D8%A7%D9%84%D8%B1%D8%A7%D8%AF%D9%8A%D9%88%D9%8A/L1.pdf
+@@ -1892,7 +1892,7 @@ country TG: DFS-ETSI
+ 	(2400 - 2483.5 @ 40), (100 mW), DFS
+ 	(5150 - 5350 @ 80), (20), DFS
+ 	(5470 - 5850 @ 160), (27), DFS
+-	(5925 - 6425 @ 320), (23), DFS, NO-OUTDOOR
++	(5925 - 6425 @ 320), (23), DFS, NO-OUTDOOR, wmmrule=ETSI
+ 	(57000 - 66000 @2160), (40), DFS
+ 
+ # Source:
+@@ -1905,7 +1905,7 @@ country TH: DFS-FCC
+ 	(5250 - 5330 @ 80), (24), DFS, AUTO-BW
+ 	(5490 - 5730 @ 160), (24), DFS
+ 	(5735 - 5835 @ 80), (30)
+-	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR
++	(5925 - 6425 @ 320), (250 mW), NO-OUTDOOR, wmmrule=ETSI
+ 
+ country TN: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -1954,7 +1954,7 @@ country TW: DFS-FCC
+ 	(5470 - 5730 @ 160), (23), DFS
+ 	(5725 - 5850 @ 80), (30)
+ 	# 6g band, LP0002 section 5.13.1.1, EIRP=23dBm
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60g band, LP0002 section 4.13.1.1 (1)(A), EIRP=40dBm(43dBm peak)
+ 	(57000 - 66000 @ 2160), (40)
+  
+@@ -1966,7 +1966,7 @@ country TZ: DFS-ETSI
+ 	(5250 - 5350 @ 80), (20), DFS, AUTO-BW, NO-OUTDOOR
+ 	(5470 - 5725 @ 160), (250 mW), DFS
+ 	(5725 - 5850 @ 80), (24), DFS
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 
+ # Source: https://zakon.rada.gov.ua/laws/show/z0201-15#n48
+ # Although it is allowed to use up to 250 mW for some 5 GHz frequency ranges,
+@@ -1983,7 +1983,7 @@ country UA: DFS-ETSI
+ 	(5250 - 5350 @ 80), (100 mW), DFS, NO-OUTDOOR, AUTO-BW, wmmrule=ETSI
+ 	(5470 - 5725 @ 160), (100 mW), DFS, NO-OUTDOOR, wmmrule=ETSI
+ 	(5725 - 5850 @ 80), (100 mW), NO-OUTDOOR
+-	(5945 - 6425 @ 320), (23), NO-OUTDOOR
++	(5945 - 6425 @ 320), (23), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60 GHz band channels 1-4, ref: Etsi En 302 567
+ 	(57000 - 66000 @ 2160), (40 mW), NO-OUTDOOR
+ 
+@@ -2022,7 +2022,7 @@ country US: DFS-FCC
+ 	(5850 - 5895 @ 40), (27), NO-OUTDOOR, AUTO-BW
+ 	# 6g band
+ 	# https://www.federalregister.gov/documents/2020/05/26/2020-11236/unlicensed-use-of-the-6ghz-band
+-	(5925 - 7125 @ 320), (12), NO-OUTDOOR
++	(5925 - 7125 @ 320), (12), NO-OUTDOOR, wmmrule=ETSI
+ 	# 60g band
+ 	# reference: section IV-D https://docs.fcc.gov/public/attachments/FCC-16-89A1.pdf
+ 	# channels 1-6 EIRP=40dBm(43dBm peak)
+@@ -2075,7 +2075,7 @@ country VN: DFS-FCC
+ 	(5250 - 5350 @ 80), (100 mW), DFS, AUTO-BW
+ 	(5470 - 5725 @ 160), (500 mW), DFS, AUTO-BW
+ 	(5725 - 5850 @ 80), (1000 mW), AUTO-BW
+-	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, AUTO-BW
++	(5925 - 6425 @ 320), (200 mW), NO-OUTDOOR, AUTO-BW, wmmrule=ETSI
+ 	(57000 - 66000 @ 2160), (10000 mW), NO-OUTDOOR
+ 
+ # Source:
+@@ -2114,7 +2114,7 @@ country ZA: DFS-ETSI
+ 	(5170 - 5250 @ 80), (20), AUTO-BW
+ 	(5250 - 5330 @ 80), (20), DFS, AUTO-BW
+ 	(5490 - 5710 @ 160), (30)
+-	(5925 - 6425 @ 320), (14)
++	(5925 - 6425 @ 320), (14), wmmrule=ETSI
+ 
+ country ZW: DFS-ETSI
+ 	(2402 - 2482 @ 40), (20)
+@@ -2131,4 +2131,4 @@ country VV:
+ 	(5150 - 5895 @ 160), (30)
+ 	(5030 - 5090 @ 20), (30)
+ 	# WiFi 6E
+-	(5925 - 7125 @ 320), (200 mW), NO-OUTDOOR
++	(5925 - 7125 @ 320), (200 mW), NO-OUTDOOR, wmmrule=ETSI
+-- 
+2.43.0
+
