@@ -33,9 +33,9 @@ fi
 
 # OpenWrt Source Details
 # --- Use this line for remote cloning ---
-readonly OPENWRT_REPO="https://github.com/openwrt/openwrt.git"
+readonly OPENWRT_REPO="https://git.openwrt.org/openwrt/openwrt.git"
 # --- Use this line for local testing (uncomment and set your path) ---
-#readonly OPENWRT_REPO="/home/gilly/repos/openwrt"
+#readonly OPENWRT_REPO="/home/user/repos/openwrt"
 
 OPENWRT_BRANCH="openwrt-24.10"
 readonly OPENWRT_COMMIT=""
@@ -44,7 +44,7 @@ readonly OPENWRT_COMMIT=""
 # --- Use this line for remote cloning ---
 readonly MTK_FEEDS_REPO="https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds"
 # --- Use this line for local testing (uncomment and set your path) ---
-#readonly MTK_FEEDS_REPO="/home/gilly/repos/mtk-openwrt-feeds"
+#readonly MTK_FEEDS_REPO="/home/user/repos/mtk-openwrt-feeds"
 
 readonly MTK_FEEDS_BRANCH="master"
 readonly MTK_FEEDS_COMMIT=""
@@ -64,7 +64,6 @@ readonly MTK_FEEDS_DIR="mtk-feeds"
 readonly SCRIPT_EXECUTABLE_NAME=$(basename "$0")
 
 readonly RULES_FILE="$MTK_FEEDS_DIR/autobuild/unified/rules"
-readonly ORIG_FILE="$OPENWRT_DIR/target/linux/mediatek/filogic/base-files/etc/board.d/02_network.orig"
 readonly BUILD_PROFILE="filogic-mac80211-mt7988_rfb-mt7996"
 
 
@@ -241,7 +240,6 @@ apply_files_from_list() {
     fi
 }
 
-
 copy_custom_files() {
     local source_dir="$SOURCE_CUSTOM_FILES_DIR"
     local target_dir="$OPENWRT_DIR/files"
@@ -370,10 +368,8 @@ main() {
     copy_custom_files
 
     configure_build
-    
 
     log "--- Starting MediaTek autobuild script ---"
-
     log "--- Running Autobuild Prepare Stage ---"
     (
         cd "$OPENWRT_DIR"
@@ -381,15 +377,9 @@ main() {
     )
 
     log "--- Applying Automated Fixes ---"
-
     if [ -f "$RULES_FILE" ]; then
         log "Patching rules file to fix build command..."
         sed -i 's/ V=\${verbose}//' "$RULES_FILE"
-    fi
-
-    if [ -f "$ORIG_FILE" ]; then
-        log "Deleting 02_network.orig file..."
-        rm -f "$ORIG_FILE"
     fi
 
     log "--- Running Autobuild Build Stage ---"
@@ -398,7 +388,6 @@ main() {
         bash "../$MTK_FEEDS_DIR/autobuild/unified/autobuild.sh" build log_file=make
     )
 
-    
     log "--- Base build process finished successfully! ---"
     log "--- You can find the base images in '$OPENWRT_DIR/bin/targets/mediatek/filogic/' ---"
 
@@ -406,7 +395,7 @@ main() {
         cd "$OPENWRT_DIR"
         prompt_for_custom_build
     )
-    
+
     log "--- Script finished. ---"
 }
 
