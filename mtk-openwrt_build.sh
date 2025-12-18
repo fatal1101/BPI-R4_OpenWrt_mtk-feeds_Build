@@ -257,13 +257,13 @@ configure_build() {
     log "--- Configuring Mediatek Build ---"
     local defconfig_src="$SOURCE_DEFAULT_CONFIG_DIR/defconfig"
     if [ -f "$defconfig_src" ]; then
-        cp "$defconfig_src" "$MTK_FEEDS_DIR/autobuild/unified/filogic/24.10/"
+        cp "$defconfig_src" "$MTK_FEEDS_DIR/autobuild/unified/filogic/25.12/"
     else
         log "Warning: Main defconfig not found. MTK autobuild may use its default."
     fi
     log "Disabling 'perf' package in configs..."
     local perf_configs=(
-        "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/24.10/defconfig"
+        "$MTK_FEEDS_DIR/autobuild/unified/filogic/mac80211/25.12/defconfig"
         "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7988_wifi7_mac80211_mlo/.config"
         "$MTK_FEEDS_DIR/autobuild/autobuild_5.4_mac80211_release/mt7986_mac80211/.config"
     )
