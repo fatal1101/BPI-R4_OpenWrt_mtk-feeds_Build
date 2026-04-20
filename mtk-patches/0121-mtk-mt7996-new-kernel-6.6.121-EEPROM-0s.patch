@@ -1,0 +1,74 @@
+From 0351554f58771c78a47725cc8777115873b15011 Mon Sep 17 00:00:00 2001
+From: Gilly1970 <gilroyscott@hotmail.com>
+Date: Wed, 4 Feb 2026 01:32:59 +1000
+Subject: [PATCH] 0139-mtk-mt7996-fix-kernel-6.6.119-EEPROM-0s
+
+---
+ mt7996/eeprom.c | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/mt7996/eeprom.c b/mt7996/eeprom.c
+index 612ff3f..49269a7 100644
+--- a/mt7996/eeprom.c
++++ b/mt7996/eeprom.c
+@@ -209,6 +209,33 @@ static bool mt7996_eeprom_variant_valid(struct mt7996_dev *dev, const u8 *def)
+ 	return true;
+ }
+ 
++static void
++mt7996_eeprom_fixup_tx_power(struct mt7996_dev *dev, const u8 *def)
++{
++	u8 *eeprom = dev->mt76.eeprom.data;
++	int i;
++	bool broken_eeprom = false;
++
++	if (eeprom[MT_EE_TX0_POWER_2G] == 0 || eeprom[MT_EE_TX0_POWER_2G] == 0xff) {
++		eeprom[MT_EE_TX0_POWER_2G] = def[MT_EE_TX0_POWER_2G];
++		broken_eeprom = true;
++	}
++
++	for (i = MT_EE_TX0_POWER_5G; i < MT_EE_TX0_POWER_5G + 5; ++i) {
++		if (eeprom[i] == 0 || eeprom[i] == 0xff) {
++			eeprom[i] = def[i];
++			broken_eeprom = true;
++		}
++	}
++
++	if (broken_eeprom) {
++		for (i = MT_EE_TX0_POWER_6G; i < MT_EE_TX0_POWER_6G + 8; ++i) {
++			eeprom[i] = def[i];
++		}
++		dev_warn(dev->mt76.dev, "EEPROM: Type B corruption fixed. Power tables restored.\n");
++	}
++}
++
+ static int
+ mt7996_eeprom_check_or_use_default(struct mt7996_dev *dev, bool use_default)
+ {
+@@ -225,10 +252,23 @@ mt7996_eeprom_check_or_use_default(struct mt7996_dev *dev, bool use_default)
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
++	
++	/* Type C Check: If blank hardware is detected, use the full good bin */
++	if (eeprom[MT_EE_TX0_POWER_2G] == 0 || eeprom[MT_EE_TX0_POWER_2G] == 0xff) {
++		if (eeprom[MT_EE_TX0_POWER_5G] == 0 || eeprom[MT_EE_TX0_POWER_5G] == 0xff) {
++			dev_warn(dev->mt76.dev, "EEPROM: Type C blank chip detected. Applying full brain transplant.\n");
++			use_default = true;
++		}
++	}
++
++	/* Type B Check: Fix power tables if not already forcing a full default load */
++	if (!use_default)
++		mt7996_eeprom_fixup_tx_power(dev, fw->data);
+ 
+ 	if (!use_default && mt7996_eeprom_variant_valid(dev, fw->data))
+ 		goto out;
+ 
++	if (!use_default)
+ 	dev_warn(dev->mt76.dev, "eeprom load fail, use default bin\n");
+ 	memcpy(eeprom, fw->data, MT7996_EEPROM_SIZE);
+ 	dev->bin_file_mode = false;
+-- 
+2.43.0
+
